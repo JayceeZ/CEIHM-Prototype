@@ -1,5 +1,5 @@
 Aria.interfaceDefinition({
-  $classpath: "common.IAppController",
+  $classpath: "app.IController",
   $extends: 'aria.templates.IModuleCtrl',
   $interface: {}
 });

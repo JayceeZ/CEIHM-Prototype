@@ -1,7 +1,7 @@
 Aria.classDefinition({
-  $classpath: "common.AppController",
+  $classpath: "app.Controller",
   $extends: "aria.templates.ModuleCtrl",
-  $implements: ["common.IAppController"],
+  $implements: ["app.IController"],
   $dependencies: ["aria.utils.Json"],
   $constructor: function() {
     // call parent constructor
@@ -12,7 +12,7 @@ Aria.classDefinition({
   },
   $prototype: {
     // specify the public interface for this module
-    $publicInterfaceName: "common.IAppController",
+    $publicInterfaceName: "app.IController",
 
     init: function(args, cb) {
       this.$logDebug("App controller initialized");

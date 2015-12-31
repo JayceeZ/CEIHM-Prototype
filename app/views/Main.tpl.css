@@ -1,5 +1,5 @@
 {CSSTemplate {
-    $classpath : "common.templates.Main"
+    $classpath : "app.views.Main"
 }}
 
     {macro main()}

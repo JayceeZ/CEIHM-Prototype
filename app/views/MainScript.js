@@ -1,5 +1,5 @@
 Aria.tplScriptDefinition({
-  $classpath: 'common.templates.MainScript',
+  $classpath: 'app.views.MainScript',
   $dependencies: ['aria.utils.Json'],
 
   $constructor: function() {
