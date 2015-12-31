@@ -5,7 +5,7 @@
 }}
 
 	{macro main()}
-		
+		Sticky wall
 	{/macro}
 
 {/Template}
