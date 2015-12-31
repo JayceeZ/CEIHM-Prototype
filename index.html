@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript">Aria = {debug: true}</script>
+    <script type="text/javascript" src="aria/ariatemplates-1.7.15.js"></script>
+    <script type="text/javascript" src="aria/css/atskin-1.7.15.js"></script>
+    <meta charset="UTF-8">
+    <title>Maquette - StickyWall</title>
+</head>
+
+<body>
+    <div id="main"></div>
+</body>
+
+<script type="text/javascript">
+    Aria.loadTemplate({
+        classpath: "common.templates.Main",
+        div: "main",
+        moduleCtrl: {
+            classpath: "common.AppController"
+        }
+    });
+</script>
+</html>
