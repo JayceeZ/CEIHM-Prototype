@@ -6,6 +6,8 @@ Aria.classDefinition({
   $constructor: function() {
     // call parent constructor
     this.$ModuleCtrl.constructor.call(this);
+
+    this._data.waitingModules = 0;
   },
   $destructor: function() {
     this.$ModuleCtrl.$destructor.call(this);
@@ -17,8 +19,30 @@ Aria.classDefinition({
     init: function(args, cb) {
       this.$logDebug("App controller initialized");
 
-      // Keep going
-      this.$callback(cb);
+      this.__initSubModules(args, cb);
+    },
+
+    __initSubModules: function(args, cb) {
+      var nextIndex = this.getData().waitingModules.length;
+      this.loadSubModules(
+        [{
+          classpath: "app.modules.stickywall.Controller",
+          refpath: "counters",
+          arrayIndex: nextIndex
+        }],
+        {
+          fn: this.onSubModuleLoaded,
+          args: cb
+        });
+      this._data.waitingModules++;
+    },
+
+    onSubModuleLoaded: function(loadResult, cb) {
+      this._data.waitingModules--;
+      if (this._data.waitingModules === 0) {
+        // Keep going
+        this.$callback(cb);
+      }
     }
   }
 });
