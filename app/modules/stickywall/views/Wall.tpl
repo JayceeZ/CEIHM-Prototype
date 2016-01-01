@@ -35,7 +35,9 @@
 
   {macro postit(child)}
     {var postit = child.item /}
-    <div class="draggable" {on click {fn: "onPostitClick", args: child, scope: this}/}>
+    {var selected = (child.index === selectedPostit) ? "selected" : "" /}
+
+    <div class="draggable ${selected}" {on click {fn: "onPostitClick", args: child, scope: this}/}>
       <div class="name">
         ${postit.name}
       </div>

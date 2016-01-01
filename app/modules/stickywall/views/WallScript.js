@@ -26,13 +26,22 @@ Aria.tplScriptDefinition({
         this.selectedPostit = child.index;
         this.selectionPoint.x = evt.clientX - child.item.position.x;
         this.selectionPoint.y = evt.clientY - child.item.position.y;
+        this.updatePostit(child.index);
       } else {
         this.selectedPostit = null;
+        this.updatePostit(child.index);
       }
     },
 
     onWallMouseClick : function(evt) {
-      //this.selectedPostit = null;
+      // Wall interactions
+    },
+
+    updatePostit : function(id) {
+      // refresh in repeater
+      var postit = this.postits[id];
+      this.$json.removeAt(this.postits, id);
+      this.$json.add(this.postits, postit, id);
     },
 
     onWallMouseMove : function(evt) {
@@ -44,9 +53,7 @@ Aria.tplScriptDefinition({
       postit.position.x = (evt.clientX - this.selectionPoint.x);
       postit.position.y = (evt.clientY - this.selectionPoint.y);
 
-      // refresh in repeater
-      this.$json.removeAt(this.postits, this.selectedPostit);
-      this.$json.add(this.postits, postit, this.selectedPostit);
+      this.updatePostit(this.selectedPostit);
     },
 
     onModuleEvent: function(evt) {

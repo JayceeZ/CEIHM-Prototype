@@ -10,16 +10,22 @@
 
     	div.postit {
     		position: relative;
+    		min-width: 4em;
+    		min-height: 4em;
     		max-width: 10em;
     		max-height: 10em;
     		background-color: white;
     	}
 
+    	div.postit div.selected {
+    		background-color: blue;
+    	}
+
     	div.postit div.draggable {
     		padding: 1em;
     		border: 1px solid black;
-    		min-width: 4em;
-    		min-height: 4em;
+    		width: 100%;
+    		height: 100%;
     	}
 
     	div.postit.name {
