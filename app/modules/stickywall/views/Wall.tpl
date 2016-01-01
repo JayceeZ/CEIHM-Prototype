@@ -41,6 +41,7 @@
 
     <div class="draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
+        {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
         {on mousemove {fn: "onWallMouseMove", scope: this}/}>
       <div class="name">
         ${postit.name}

@@ -40,7 +40,7 @@ Aria.tplScriptDefinition({
       }
     },
 
-    onPostitTap : function(evt, child) {
+    onPostitTouchStart : function(evt, child) {
       this.$logDebug("TouchStart Postit");
       evt.preventDefault(true);
       if(this.selectedPostit !== child.index) {
@@ -52,6 +52,7 @@ Aria.tplScriptDefinition({
 
         if(exSelect)
           this.updatePostit(exSelect);
+        this.updatePostit(child.index);
       } else {
         this.selectedPostit = null;
         this.updatePostit(child.index);
