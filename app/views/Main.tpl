@@ -1,6 +1,6 @@
 {Template {
    $classpath:'app.views.Main',
-   $css: ['app.views.Main'],
+   $css: ['app.views.css.Main'],
    $hasScript: true
 }}
 

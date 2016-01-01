@@ -8,8 +8,6 @@ Aria.tplScriptDefinition({
 
   $prototype: {
     $dataReady : function() {
-      this.$logDebug("DataReady Main");
-
       this.dataReady = true;
     },
 

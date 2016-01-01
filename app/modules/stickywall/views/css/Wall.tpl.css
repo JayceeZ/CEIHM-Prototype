@@ -1,0 +1,34 @@
+{CSSTemplate {
+    $classpath : "app.modules.stickywall.views.css.Wall"
+}}
+
+    {macro main()}
+    	div.wall {
+    		width: 100%;
+    		height: 1000px;
+    	}
+
+    	div.postit {
+    		position: relative;
+    		max-width: 10em;
+    		max-height: 10em;
+    		background-color: white;
+    	}
+
+    	div.postit div.draggable {
+    		padding: 1em;
+    		border: 1px solid black;
+    		min-width: 4em;
+    		min-height: 4em;
+    	}
+
+    	div.postit.name {
+    		background-color: blue;
+    	}
+
+    	div.postit.content {
+    		border: 1px solid red;
+    	}
+    {/macro}
+
+{/CSSTemplate}

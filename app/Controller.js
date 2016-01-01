@@ -19,7 +19,7 @@ Aria.classDefinition({
     $publicInterfaceName: "app.IController",
 
     init: function(args, cb) {
-      this.$logDebug("App controller init");
+      this.$logDebug("Init");
 
       this.$callback(cb);
 

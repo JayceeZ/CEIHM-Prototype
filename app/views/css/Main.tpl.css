@@ -1,0 +1,11 @@
+{CSSTemplate {
+    $classpath : "app.views.css.Main"
+}}
+
+    {macro main()}
+    	.navbar {
+    		margin-bottom: 0;
+    	}
+    {/macro}
+
+{/CSSTemplate}
