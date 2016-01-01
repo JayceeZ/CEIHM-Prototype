@@ -5,7 +5,8 @@
     {macro main()}
     	div.wall {
     		width: 100%;
-    		height: 1000px;
+    		min-height: 718px;
+    		border-bottom: 1px solid black;
     	}
 
     	div.postit {

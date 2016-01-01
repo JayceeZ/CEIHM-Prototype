@@ -18,8 +18,10 @@
         classList: ["wall"],
       },
       on: {
-        click: {fn: "onWallMouseClick", scope: this},
-        mousemove: {fn: "onWallMouseMove", scope: this}
+        mousedown: {fn: "onWallMouseDown", scope: this},
+        mousemove: {fn: "onWallMouseMove", scope: this},
+        touchmove: {fn: "onWallTouchMove", scope: this},
+        touchend: {fn: "onWallTouchEnd", scope: this}
       },
 			childSections : {
         id: "postit",
@@ -37,7 +39,9 @@
     {var postit = child.item /}
     {var selected = (child.index === selectedPostit) ? "selected" : "" /}
 
-    <div class="draggable ${selected}" {on click {fn: "onPostitClick", args: child, scope: this}/}>
+    <div class="draggable ${selected}" 
+        {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
+        {on mousemove {fn: "onWallMouseMove", scope: this}/}>
       <div class="name">
         ${postit.name}
       </div>
