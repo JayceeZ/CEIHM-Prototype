@@ -4,7 +4,7 @@ Aria.tplScriptDefinition({
 
   $constructor: function() {
     this.wallOrig = {x: 0, y: 0};
-    this.mouseMoveWall = false;
+    this.wallMove = false;
 
     this.postits = [];
     this.selectedPostit = null;
@@ -73,14 +73,14 @@ Aria.tplScriptDefinition({
       this.$logDebug("MouseDown Wall");
       evt.preventDefault(true);
       // Wall interactions
-      this.mouseMoveWall = {x: evt.clientX, y: evt.clientY};
+      this.wallMove = {x: evt.clientX, y: evt.clientY};
     },
 
     onWallMouseUp : function(evt) {
       this.$logDebug("MouseDown Wall");
       evt.preventDefault(true);
       // Wall interactions
-      this.mouseMoveWall = false;
+      this.wallMove = false;
     },
 
     updatePostit : function(id, evt) {
@@ -113,25 +113,37 @@ Aria.tplScriptDefinition({
         postit.position.y = evt.clientY - this.selectionPoint.y;
 
         this.updatePostit(this.selectedPostit);
-      } else if(this.mouseMoveWall) {
-        this.moveWall(evt.clientX - this.mouseMoveWall.x, evt.clientY - this.mouseMoveWall.y);
-        this.mouseMoveWall.x = evt.clientX;
-        this.mouseMoveWall.y = evt.clientY;
+      } else if(this.wallMove) {
+        this.moveWall(evt.clientX - this.wallMove.x, evt.clientY - this.wallMove.y);
+        this.wallMove.x = evt.clientX;
+        this.wallMove.y = evt.clientY;
       }
+    },
+
+    onWallTouchStart : function(evt) {
+      this.$logDebug("TouchStart Wall");
+      evt.preventDefault(true);
+      // Wall interactions
+      this.wallMove = {x: evt.touches[0].clientX, y: evt.touches[0].clientY};
     },
 
     onWallTouchMove: function(evt) {
       this.$logDebug("TouchMove Wall");
       evt.preventDefault(true);
-      if (this.selectedPostit === null)
-        return;
-      var postit = this.postits[this.selectedPostit];
+      if (this.selectedPostit !== null) {
+        var postit = this.postits[this.selectedPostit];
 
-      // move positions
-      postit.position.x = evt.touches[0].clientX - this.selectionPoint.x;
-      postit.position.y = evt.touches[0].clientY - this.selectionPoint.y;
+        // move positions
+        postit.position.x = evt.touches[0].clientX - this.selectionPoint.x;
+        postit.position.y = evt.touches[0].clientY - this.selectionPoint.y;
 
-      this.updatePostit(this.selectedPostit, evt);
+        this.updatePostit(this.selectedPostit, evt);
+
+      } else if(this.wallMove) {
+        this.moveWall(evt.touches[0].clientX - this.wallMove.x, evt.touches[0].clientY - this.wallMove.y);
+        this.wallMove.x = evt.touches[0].clientX;
+        this.wallMove.y = evt.touches[0].clientY;
+      }
     },
 
     onWallTouchEnd: function(evt) {
@@ -141,6 +153,7 @@ Aria.tplScriptDefinition({
         this.selectedPostit = null;
         this.updatePostit(exSelect);
       }
+      this.wallMove = false;
     },
 
     onModuleEvent: function(evt) {
