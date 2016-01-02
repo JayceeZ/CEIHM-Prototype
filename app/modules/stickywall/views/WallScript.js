@@ -3,6 +3,9 @@ Aria.tplScriptDefinition({
   $dependencies: ['aria.utils.Json', 'aria.utils.dragdrop.Drag'],
 
   $constructor: function() {
+    this.wallOrig = {x: 0, y: 0};
+    this.mouseMoveWall = false;
+
     this.postits = [];
     this.selectedPostit = null;
     this.selectionPoint = {x: 0, y: 0};
@@ -13,25 +16,32 @@ Aria.tplScriptDefinition({
       this.postits = this.moduleCtrl.getPostits();
     },
 
-    postitAttributes : function(child) {
+    /**
+     * Drawing attributes
+     * @param child
+     * @returns {{classList: string[], style: string}}
+     */
+    postitAttributes: function(child) {
       var postit = child.item;
+      var posX = postit.position.x;
+      var posY = postit.position.y;
       return {
-        classList : ["postit"],
-        style: "left: "+postit.position.x+"px; top: "+postit.position.y+"px;"
+        classList: ["postit"],
+        style: "left: " + posX + "px; top: " + posY + "px;"
       };
     },
 
-    onPostitMouseDown : function(evt, child) {
+    onPostitMouseDown: function(evt, child) {
       this.$logDebug("MouseDown Postit");
       evt.preventDefault(true);
-      if(this.selectedPostit !== child.index) {
+      if (this.selectedPostit !== child.index) {
         // un nouveau postit
         var exSelect = this.selectedPostit;
         this.selectedPostit = child.index;
         this.selectionPoint.x = evt.clientX - child.item.position.x;
         this.selectionPoint.y = evt.clientY - child.item.position.y;
 
-        if(exSelect)
+        if (exSelect)
           this.updatePostit(exSelect);
         this.updatePostit(child.index);
       } else {
@@ -40,17 +50,17 @@ Aria.tplScriptDefinition({
       }
     },
 
-    onPostitTouchStart : function(evt, child) {
+    onPostitTouchStart: function(evt, child) {
       this.$logDebug("TouchStart Postit");
       evt.preventDefault(true);
-      if(this.selectedPostit !== child.index) {
+      if (this.selectedPostit !== child.index) {
         var exSelect = this.selectedPostit;
         this.selectedPostit = child.index;
 
         this.selectionPoint.x = evt.touches[0].clientX - child.item.position.x;
         this.selectionPoint.y = evt.touches[0].clientY - child.item.position.y;
 
-        if(exSelect)
+        if (exSelect)
           this.updatePostit(exSelect);
         this.updatePostit(child.index);
       } else {
@@ -63,6 +73,14 @@ Aria.tplScriptDefinition({
       this.$logDebug("MouseDown Wall");
       evt.preventDefault(true);
       // Wall interactions
+      this.mouseMoveWall = {x: evt.clientX, y: evt.clientY};
+    },
+
+    onWallMouseUp : function(evt) {
+      this.$logDebug("MouseDown Wall");
+      evt.preventDefault(true);
+      // Wall interactions
+      this.mouseMoveWall = false;
     },
 
     updatePostit : function(id, evt) {
@@ -75,37 +93,50 @@ Aria.tplScriptDefinition({
       // TODO: fix the TouchMove loss
     },
 
-    onWallMouseMove : function(evt) {
-      this.$logDebug("MouseMove Wall");
-      evt.preventDefault(true);
-      if(this.selectedPostit === null)
-        return;
-      var postit = this.postits[this.selectedPostit];
-
-      // move positions
-      postit.position.x = (evt.clientX - this.selectionPoint.x);
-      postit.position.y = (evt.clientY - this.selectionPoint.y);
-
-      this.updatePostit(this.selectedPostit);
+    moveWall: function(dx, dy) {
+      for (var i = 0; i < this.postits.length; i++) {
+        var postit = this.postits[i];
+        postit.position.x += dx;
+        postit.position.y += dy;
+        this.updatePostit(i);
+      }
     },
 
-    onWallTouchMove : function(evt) {
+    onWallMouseMove: function(evt) {
+      this.$logDebug("MouseMove Wall");
+      evt.preventDefault(true);
+      if (this.selectedPostit !== null) {
+        var postit = this.postits[this.selectedPostit];
+
+        // move positions
+        postit.position.x = evt.clientX - this.selectionPoint.x;
+        postit.position.y = evt.clientY - this.selectionPoint.y;
+
+        this.updatePostit(this.selectedPostit);
+      } else if(this.mouseMoveWall) {
+        this.moveWall(evt.clientX - this.mouseMoveWall.x, evt.clientY - this.mouseMoveWall.y);
+        this.mouseMoveWall.x = evt.clientX;
+        this.mouseMoveWall.y = evt.clientY;
+      }
+    },
+
+    onWallTouchMove: function(evt) {
       this.$logDebug("TouchMove Wall");
       evt.preventDefault(true);
-      if(this.selectedPostit === null)
+      if (this.selectedPostit === null)
         return;
       var postit = this.postits[this.selectedPostit];
 
       // move positions
-      postit.position.x = (evt.touches[0].clientX - this.selectionPoint.x);
-      postit.position.y = (evt.touches[0].clientY - this.selectionPoint.y);
+      postit.position.x = evt.touches[0].clientX - this.selectionPoint.x;
+      postit.position.y = evt.touches[0].clientY - this.selectionPoint.y;
 
       this.updatePostit(this.selectedPostit, evt);
     },
 
-    onWallTouchEnd : function(evt) {
+    onWallTouchEnd: function(evt) {
       this.$logDebug("TouchEnd Wall");
-      if(this.selectedPostit !== null) {
+      if (this.selectedPostit !== null) {
         var exSelect = this.selectedPostit;
         this.selectedPostit = null;
         this.updatePostit(exSelect);

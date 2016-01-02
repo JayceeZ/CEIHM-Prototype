@@ -5,7 +5,7 @@
     {macro main()}
     	div.wall {
     		width: 100%;
-    		min-height: 718px;
+    		height: 100%;
     		border-bottom: 1px solid black;
     	}
 

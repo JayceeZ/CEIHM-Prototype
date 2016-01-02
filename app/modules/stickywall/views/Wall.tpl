@@ -19,6 +19,7 @@
       },
       on: {
         mousedown: {fn: "onWallMouseDown", scope: this},
+        mouseup: {fn: "onWallMouseUp", scope: this},
         mousemove: {fn: "onWallMouseMove", scope: this},
         touchmove: {fn: "onWallTouchMove", scope: this},
         touchend: {fn: "onWallTouchEnd", scope: this}

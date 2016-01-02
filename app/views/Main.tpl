@@ -8,7 +8,9 @@
     {if this.dataReady}
       {call navbar()/}
     {/if}
-    <div id="submodule"></div>
+    <div id="submodule">
+      Loading ...
+    </div>
   {/macro}
 
   {macro navbar()}
