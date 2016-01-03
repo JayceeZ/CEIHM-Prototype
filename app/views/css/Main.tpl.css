@@ -3,6 +3,10 @@
 }}
 
     {macro main()}
+      div#submodule {
+        height: calc(100% - 50px);
+      }
+
     	.navbar {
     		margin-bottom: 0;
     	}

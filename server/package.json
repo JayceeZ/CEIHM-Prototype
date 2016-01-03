@@ -1,19 +1,23 @@
 {
   "name": "stickywall",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.14.2",
     "connect": "^3.4.0",
+    "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "kerberos": "0.0.17",
     "mongodb": "^2.1.2",
     "mongojs": "^2.2.2",
-    "multer": "^1.1.0"
+    "morgan": "^1.6.1",
+    "multer": "^1.1.0",
+    "mongoose": "latest"
   },
   "devDependencies": {},
   "scripts": {
+    "start" : "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
