@@ -9,11 +9,22 @@
 	{/macro}
 
 	{macro buildWall()}
-		{repeater {
-			loopType: "array",
-			content: postits,
-			type: "div",
-      id: "wall",
+		{section {
+      id : "wall",
+      macro : "postits",
+      bindRefreshTo: [{
+        to : "postits",
+        inside : model,
+        recursive : false
+      }],
+    }/}
+	{/macro}
+
+  {macro postits()}
+    {repeater {
+      loopType: "array",
+      content: model.postits,
+      type: "div",
       attributes: {
         classList: ["wall"],
       },
@@ -25,7 +36,7 @@
         touchmove: {fn: "onWallTouchMove", scope: this},
         touchend: {fn: "onWallTouchEnd", scope: this}
       },
-			childSections : {
+      childSections : {
         id: "postit",
         type: "div",
         attributes: postitAttributes,
@@ -33,9 +44,9 @@
           name: "postit",
           scope: this
         }
-			}
-		}/}
-	{/macro}
+      }
+    }/}
+  {/macro}
 
   {macro postit(child)}
     {var postit = child.item /}

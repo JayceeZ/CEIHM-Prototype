@@ -1,11 +1,14 @@
 var application_root = __dirname,
   mongoose = require('mongoose'),
   express = require("express"),
+  http = require("http"),
   path = require("path"),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
   logger = require('morgan'),
-  schemas = require('./schemas.js');
+  schemas = require('./schemas.js'),
+  socketio = require('socket.io'),
+  _ = require('lodash');
 
 var app = express();
 
@@ -46,6 +49,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+/**
+ * REST API
+ */
 app.get('/api', function (req, res) {
   res.send('TODO: create list of API urls');
 });
@@ -61,23 +68,6 @@ app.get('/api/wall/:id', function (req, res) {
     } else {
       res.status(500).json({ error: 'Wall with id ['+req.params.id+'] can\'t be fetched' })
     }
-  });
-});
-
-app.update('/api/wall/:id', function(req, res) {
-  Wall.find({_id: req.params.id}, function(err, results) {
-    if(results) {
-      var wall = results[0];
-      res.status(200).json(results[0]);
-    } else {
-      res.status(500).json({ error: 'Wall with id ['+req.params.id+'] can\'t be fetched' })
-    }
-  });
-});
-
-app.get('/api/walls/', function (req, res) {
-  Wall.find(function(err, results) {
-    res.status(200).json(results);
   });
 });
 
@@ -98,5 +88,114 @@ app.put('/api/wall/new', function (req, res) {
   }, this);
 });
 
-// Launch server
+app.get('/api/walls/', function (req, res) {
+  Wall.find(function(err, results) {
+    res.status(200).json(results);
+  });
+});
+
 app.listen(8000);
+
+/**
+ * Sockets API
+ */
+var ioServer = socketio(8001);
+
+
+ioServer.on('connection', function (socket) {
+  var connectedClients = [];
+
+  socket.on('register_wall', function (data) {
+    var wallId = data.wallId;
+    socket.join(wallId);
+    console.log('Client '+socket.id+' associated to wall '+ wallId + ' with ');
+    socket.emit('wall_registered');
+  });
+
+  socket.on('update_postit_content', function (postitUpdate) {
+    // get the id of the wall of the client
+    var wallId = _.values(socket.rooms)[1];
+
+    if(wallId) {
+      // update post-it in the wall of client
+      Wall.findOne({_id: wallId}, function(err, result) {
+        if(result) {
+          var wall = result;
+          _.forEach(wall.postits, function(postit, id) {
+            if (id === postitUpdate.id) {
+              postit.content = postitUpdate.content;
+              postitUpdate.postit = postit;
+            }
+          }, this);
+          Wall.update({_id: wall.id}, { $set: { postits: wall.postits }}, function(err) {
+            if (err)
+              postitUpdate.status = 'ERROR: Wall not saved';
+            else
+              postitUpdate.status = 'SUCCESS: Wall saved successfully';
+            socket.emit('postit_updated', postitUpdate);
+            socket.to(wallId).emit('postit_updated', postitUpdate);
+          }, this);
+        }
+      });
+    } else {
+      socket.emit('action_error', {message: 'No wall registered'});
+    }
+  });
+
+  socket.on('update_postit_position', function (postitUpdate) {
+    // get the id of the wall of the client
+    var wallId = _.values(socket.rooms)[1];
+
+    if(wallId) {
+      // update post-it in the wall of client
+      Wall.findOne({_id: wallId}, function(err, result) {
+        if(result) {
+          var wall = result;
+          _.forEach(wall.postits, function(postit, id) {
+            if (id === postitUpdate.id) {
+              postit.position.x = postitUpdate.position.x;
+              postit.position.y = postitUpdate.position.y;
+              postitUpdate.postit = postit;
+            }
+          }, this);
+          Wall.update({_id: wall.id}, { $set: { postits: wall.postits }}, function(err) {
+            if (err)
+              postitUpdate.status = 'ERROR: Wall not saved';
+            else
+              postitUpdate.status = 'SUCCESS: Wall saved successfully';
+              socket.emit('postit_updated', postitUpdate);
+              socket.to(wallId).emit('postit_updated', postitUpdate);
+          }, this);
+        }
+      });
+    } else {
+      socket.emit('action_error', {message: 'No wall registered'});
+    }
+  });
+
+  socket.on('new_postit', function (postitAdded) {
+    // get the id of the wall of the client
+    var wallId = _.values(socket.rooms)[1];
+
+    if(wallId) {
+      // update post-it in the wall of client
+      Wall.findOne({_id: wallId}, function(err, result) {
+        // add post-it in the wall
+        result[0].postits.push(postitAdded);
+        result[0].save(function(err) {
+          if (err)
+            postitAdded.status = 'ERROR: Wall not saved';
+          else
+            postitAdded.status = 'SUCCESS: Wall saved successfully';
+            socket.to(wallId).emit('postit_added', postitAdded);
+        }, this);
+      });
+    } else {
+      socket.emit('action_error', {message: 'No wall registered'});
+    }
+  });
+
+  socket.on('disconnect', function() {
+    console.log('Client '+socket.id+' disconnected');
+  });
+});

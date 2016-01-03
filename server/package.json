@@ -9,15 +9,17 @@
     "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
     "kerberos": "0.0.17",
+    "lodash": "^3.10.1",
     "mongodb": "^2.1.2",
     "mongojs": "^2.2.2",
+    "mongoose": "latest",
     "morgan": "^1.6.1",
     "multer": "^1.1.0",
-    "mongoose": "latest"
+    "socketio": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
-    "start" : "node index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

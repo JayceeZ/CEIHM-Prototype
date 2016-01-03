@@ -6,14 +6,16 @@ Aria.tplScriptDefinition({
     this.wallOrig = {x: 0, y: 0};
     this.wallMove = false;
 
-    this.postits = [];
+    this.model = {
+      postits: []
+    };
     this.selectedPostit = null;
     this.selectionPoint = {x: 0, y: 0};
   },
 
   $prototype: {
     $dataReady: function() {
-      this.postits = this.moduleCtrl.getPostits();
+      this.__extractPostits();
     },
 
     /**
@@ -42,11 +44,12 @@ Aria.tplScriptDefinition({
         this.selectionPoint.y = evt.clientY - child.item.position.y;
 
         if (exSelect)
-          this.updatePostit(exSelect);
-        this.updatePostit(child.index);
+          this._updatePostit(exSelect);
+        this._updatePostit(child.index);
       } else {
         this.selectedPostit = null;
-        this.updatePostit(child.index);
+        this._updatePostit(child.index);
+        this.onWallSave();
       }
     },
 
@@ -61,11 +64,11 @@ Aria.tplScriptDefinition({
         this.selectionPoint.y = evt.touches[0].clientY - child.item.position.y;
 
         if (exSelect)
-          this.updatePostit(exSelect);
-        this.updatePostit(child.index);
+          this._updatePostit(exSelect);
+        this._updatePostit(child.index);
       } else {
         this.selectedPostit = null;
-        this.updatePostit(child.index);
+        this._updatePostit(child.index);
       }
     },
 
@@ -83,22 +86,32 @@ Aria.tplScriptDefinition({
       this.wallMove = false;
     },
 
-    updatePostit : function(id, evt) {
+    _updatePostit : function(id, data) {
       // refresh in repeater
-      var postit = this.postits[id];
 
-      this.$json.removeAt(this.postits, id);
-      this.$json.add(this.postits, postit, id);
+      var postit = this.model.postits[id];
+      if(data)
+        var postit = data;
 
-      // TODO: fix the TouchMove loss
+      this.$json.removeAt(this.model.postits, id);
+      this.$json.add(this.model.postits, postit, id);
     },
 
     moveWall: function(dx, dy) {
-      for (var i = 0; i < this.postits.length; i++) {
-        var postit = this.postits[i];
-        postit.position.x += dx;
-        postit.position.y += dy;
-        this.updatePostit(i);
+      this.wallOrig.x += dx;
+      this.wallOrig.y += dy;
+      for (var i = 0; i < this.model.postits.length; i++) {
+        var postit = this.model.postits[i];
+        //postit.position.x += dx;
+        //postit.position.y += dy;
+        this._updatePostit(i);
+      }
+    },
+
+    onWallSave : function(evt) {
+      for (var id = 0; id < this.model.postits.length; id++) {
+        var postit = this.model.postits[id];
+        this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.position.x, postit.position.y);
       }
     },
 
@@ -106,13 +119,13 @@ Aria.tplScriptDefinition({
       this.$logDebug("MouseMove Wall");
       evt.preventDefault(true);
       if (this.selectedPostit !== null) {
-        var postit = this.postits[this.selectedPostit];
+        var postit = this.model.postits[this.selectedPostit];
 
         // move positions
         postit.position.x = evt.clientX - this.selectionPoint.x;
         postit.position.y = evt.clientY - this.selectionPoint.y;
 
-        this.updatePostit(this.selectedPostit);
+        this._updatePostit(this.selectedPostit);
       } else if(this.wallMove) {
         this.moveWall(evt.clientX - this.wallMove.x, evt.clientY - this.wallMove.y);
         this.wallMove.x = evt.clientX;
@@ -131,13 +144,13 @@ Aria.tplScriptDefinition({
       this.$logDebug("TouchMove Wall");
       evt.preventDefault(true);
       if (this.selectedPostit !== null) {
-        var postit = this.postits[this.selectedPostit];
+        var postit = this.model.postits[this.selectedPostit];
 
         // move positions
         postit.position.x = evt.touches[0].clientX - this.selectionPoint.x;
         postit.position.y = evt.touches[0].clientY - this.selectionPoint.y;
 
-        this.updatePostit(this.selectedPostit, evt);
+        this._updatePostit(this.selectedPostit, evt);
 
       } else if(this.wallMove) {
         this.moveWall(evt.touches[0].clientX - this.wallMove.x, evt.touches[0].clientY - this.wallMove.y);
@@ -151,15 +164,22 @@ Aria.tplScriptDefinition({
       if (this.selectedPostit !== null) {
         var exSelect = this.selectedPostit;
         this.selectedPostit = null;
-        this.updatePostit(exSelect);
+        this._updatePostit(exSelect);
       }
       this.wallMove = false;
     },
 
     onModuleEvent: function(evt) {
-      if (evt.name === "app.{somename}") {
-        // perform some actions on the view
+      if (evt.name === 'app.module.stickywall.wall.loaded') {
+        this.__extractPostits();
       }
+      if (evt.name === 'app.module.stickywall.wall.postit.updated') {
+        this._updatePostit(evt.id, evt.postit);
+      }
+    },
+
+    __extractPostits : function() {
+      this.$json.setValue(this.model, "postits", this.moduleCtrl.getPostits());
     }
   }
 });
