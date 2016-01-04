@@ -27,7 +27,8 @@ Aria.classDefinition({
 
   $statics: {
     "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
-    "TEST_WALL_ID": "5687f9ab7eecd9eb6e5c4dbb"
+    "TEST_WALL_ID": "56899b1a5acd823f4f57ce8b",
+    "COPY1_TEST_WALL_ID": "5687f9ab7eecd9eb6e5c4dbb"
   },
 
   $prototype: {
@@ -43,10 +44,19 @@ Aria.classDefinition({
       this.$callback(cb);
     },
 
-    addPostit: function(id, postit) {
+    onChangeWall: function(id) {
+      this._loadWall(id);
+    },
+
+    addPostit: function() {
+      var newPostit = {
+        name: "New postit",
+        content: "Content of the new post-it",
+        position: {x: 0, y: 0}
+      };
       try {
         aria.core.JsonValidator.normalize({
-          json: postit,
+          json: newPostit,
           beanName: "app.modules.stickywall.beans.PostitBean.Postit"
         }, true);
       } catch (ex) {
@@ -54,9 +64,14 @@ Aria.classDefinition({
         this.$logError(this.INVALID_POSTIT, [id]);
         return;
       }
-      this.__wall.postits[id] = postit;
       if(this.wallSocket) {
-        this.wallSocket.emit('new_postit', postit);
+        this.wallSocket.emit('new_postit', newPostit);
+      }
+    },
+
+    deletePostit: function(id) {
+      if(this.wallSocket) {
+        this.wallSocket.emit('delete_postit', {id: id});
       }
     },
 
@@ -78,7 +93,7 @@ Aria.classDefinition({
     },
 
     getPostits: function() {
-      return this.__wall.postits;
+      return _.clone(this.__wall.postits, true);
     },
 
     __onSocketError : function(data) {
@@ -98,10 +113,11 @@ Aria.classDefinition({
       this.wallSocket.on('action_error', this.__onSocketError);
       this.wallSocket.on('disconnect', this.__onSocketDisconnect);
       this.wallSocket.on('wall_registered', function() {
-        console.log('You are connected to the socket (LiveUpdates)');
-      });
+        this.$logDebug('You are connected to the socket (LiveUpdates)');
+      }.bind(this));
       this.wallSocket.on('postit_updated', this.__onPostitUpdated.bind(this));
-      this.wallSocket.on('postit_added', this.__onPostitUpdated.bind(this));
+      this.wallSocket.on('postit_added', this.__onPostitCreated.bind(this));
+      this.wallSocket.on('postit_removed', this.__onPostitRemoved.bind(this));
     },
 
     _loadWall: function(id) {
@@ -111,16 +127,17 @@ Aria.classDefinition({
         method: "get",
         expectedResponseType: 'json',
         callback: {
-          fn: this.__onWallLoaded,
+          fn: this._onWallLoaded,
           scope: this,
           args: {
-            callback: this.__onWallLoaded
+            callback: this._onWallLoaded
           }
         }
       });
     },
 
     __onPostitUpdated : function(data) {
+      this.$logDebug('Postit ('+data.id+') new data: '+data.postit);
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.postit.updated',
         id: data.id,
@@ -128,8 +145,25 @@ Aria.classDefinition({
       });
     },
 
-    __onWallLoaded: function(response, args) {
+    __onPostitCreated : function(data) {
+      this.$logDebug('New Postit ('+data+')');
+      this.$raiseEvent({
+        name: 'app.module.stickywall.wall.postit.created',
+        postit: data
+      });
+    },
+
+    __onPostitRemoved : function(data) {
+      this.$logDebug('Postit ('+data+') removed');
+      this.$raiseEvent({
+        name: 'app.module.stickywall.wall.postit.removed',
+        id: data.id
+      });
+    },
+
+    _onWallLoaded: function(response, args) {
       this.__wall = response.responseJSON;
+      this.$logDebug('Wall ('+this.__wall._id+') loaded');
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.loaded'
       });

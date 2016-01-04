@@ -130,10 +130,10 @@ ioServer.on('connection', function (socket) {
           Wall.update({_id: wall.id}, { $set: { postits: wall.postits }}, function(err) {
             if (err)
               postitUpdate.status = 'ERROR: Wall not saved';
-            else
+            else {
               postitUpdate.status = 'SUCCESS: Wall saved successfully';
-            socket.emit('postit_updated', postitUpdate);
-            socket.to(wallId).emit('postit_updated', postitUpdate);
+              socket.to(wallId).emit('postit_updated', postitUpdate);
+            }
           }, this);
         }
       });
@@ -161,10 +161,11 @@ ioServer.on('connection', function (socket) {
           Wall.update({_id: wall.id}, { $set: { postits: wall.postits }}, function(err) {
             if (err)
               postitUpdate.status = 'ERROR: Wall not saved';
-            else
+            else {
               postitUpdate.status = 'SUCCESS: Wall saved successfully';
               socket.emit('postit_updated', postitUpdate);
               socket.to(wallId).emit('postit_updated', postitUpdate);
+            }
           }, this);
         }
       });
@@ -181,13 +182,39 @@ ioServer.on('connection', function (socket) {
       // update post-it in the wall of client
       Wall.findOne({_id: wallId}, function(err, result) {
         // add post-it in the wall
-        result[0].postits.push(postitAdded);
-        result[0].save(function(err) {
+        result.postits.push(postitAdded);
+        result.save(function(err) {
           if (err)
             postitAdded.status = 'ERROR: Wall not saved';
-          else
+          else {
             postitAdded.status = 'SUCCESS: Wall saved successfully';
+            socket.emit('postit_added', postitAdded);
             socket.to(wallId).emit('postit_added', postitAdded);
+          }
+        }, this);
+      });
+    } else {
+      socket.emit('action_error', {message: 'No wall registered'});
+    }
+  });
+
+  socket.on('delete_postit', function (postitRemoved) {
+    // get the id of the wall of the client
+    var wallId = _.values(socket.rooms)[1];
+
+    if(wallId) {
+      // update post-it in the wall of client
+      Wall.findOne({_id: wallId}, function(err, result) {
+        // add post-it in the wall
+        _.pullAt(result.postits, [postitRemoved.id]);
+        Wall.update({_id: result.id}, { $set: { postits: result.postits }}, function(err) {
+          if (err)
+            postitRemoved.status = 'ERROR: Wall not saved';
+          else {
+            postitRemoved.status = 'SUCCESS: Wall saved successfully';
+            socket.emit('postit_removed', postitRemoved);
+            socket.to(wallId).emit('postit_removed', postitRemoved);
+          }
         }, this);
       });
     } else {

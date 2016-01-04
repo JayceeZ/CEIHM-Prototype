@@ -5,6 +5,10 @@
 }}
 
 	{macro main()}
+    <div class="actions">
+      <div class="btn btn-info" {on click {fn: "onCreatePostit", scope: this}/}>Create Post-It</div>
+      <div class="btn btn-danger" {on click {fn: "onDeletePostit", scope: this}/}>Delete Post-It</div>
+    </div>
 		{call buildWall() /}
 	{/macro}
 
@@ -16,7 +20,7 @@
         to : "postits",
         inside : model,
         recursive : false
-      }],
+      }]
     }/}
 	{/macro}
 
@@ -54,6 +58,7 @@
 
     <div class="draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
+        {on mouseup {fn: "onPostitMouseUp", args: child, scope: this}/}
         {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
         {on mousemove {fn: "onWallMouseMove", scope: this}/}>
       <div class="name">
