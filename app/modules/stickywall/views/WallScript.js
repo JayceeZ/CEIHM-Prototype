@@ -89,7 +89,7 @@ Aria.tplScriptDefinition({
       evt.preventDefault(true);
       // Wall interactions
       this.wallMove = {x: evt.clientX, y: evt.clientY};
-      if (this.selectedPostit) {
+      if (this.selectedPostit !== null) {
         var i = this.selectedPostit;
         this.selectedPostit = null;
         this._updatePostit(i);
