@@ -26,9 +26,9 @@ Aria.classDefinition({
   },
 
   $statics: {
+    "SERVERIP": "172.19.250.4",
     "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
-    "TEST_WALL_ID": "5689bee245f371ac1d9eb633",
-    "COPY1_TEST_WALL_ID": "5687f9ab7eecd9eb6e5c4dbb"
+    "TEST_WALL_ID": "5689bee245f371ac1d9eb633"
   },
 
   $prototype: {
@@ -51,7 +51,7 @@ Aria.classDefinition({
     addPostit: function() {
       var newPostit = {
         name: "New postit",
-        content: "Content of the new post-it",
+        content: "Add content ...",
         position: {x: 0, y: 0}
       };
       try {
@@ -109,7 +109,7 @@ Aria.classDefinition({
     __registerWallSocket: function (wallId) {
       if (typeof io === 'undefined')
         return;
-      this.wallSocket = io('http://localhost:8001/');
+      this.wallSocket = io('http://'+this.SERVERIP+':8001/');
       this.wallSocket.emit('register_wall', {wallId: wallId});
       this.wallSocket.on('action_error', this.__onSocketError);
       this.wallSocket.on('disconnect', this.__onSocketDisconnect);
@@ -124,7 +124,7 @@ Aria.classDefinition({
     _loadWall: function(id) {
       this.__registerWallSocket(id);
       aria.core.IO.asyncRequest({
-        url: "http://localhost:8000/api/wall/" + id,
+        url: "http://"+this.SERVERIP+":8000/api/wall/" + id,
         method: "get",
         expectedResponseType: 'json',
         callback: {

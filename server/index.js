@@ -20,7 +20,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
-app.use(express.static(path.join(application_root, "public")));
+app.use(express.static(path.join(application_root, "/../public")));
 
 // Model references
 var Wall = mongoose.model('Wall', schemas.wall);
@@ -49,6 +49,12 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.use( function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  next();
+});
 
 /**
  * REST API
@@ -66,7 +72,7 @@ app.get('/api/wall/:id', function (req, res) {
     if(results) {
       res.status(200).json(results[0]);
     } else {
-      res.status(500).json({ error: 'Wall with id ['+req.params.id+'] can\'t be fetched' })
+      res.status(500).json({ error: 'Wall with id ['+req.params.id+'] can\'t be fetched' });
     }
   });
 });
@@ -100,7 +106,6 @@ app.listen(8000);
  * Sockets API
  */
 var ioServer = socketio(8001);
-
 
 ioServer.on('connection', function (socket) {
   var connectedClients = [];

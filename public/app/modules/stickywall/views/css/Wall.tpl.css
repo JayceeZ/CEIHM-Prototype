@@ -16,9 +16,10 @@
     	}
 
     	div.actions {
-    		position: relative;
-    		top: 1em;
-    		left: 1em;
+    		position: absolute;
+			z-index: 1000;
+    		top: 0.5em;
+    		right: 1em;
     	}
 
     	div.selected {
