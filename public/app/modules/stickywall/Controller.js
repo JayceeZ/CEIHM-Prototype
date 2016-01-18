@@ -26,7 +26,7 @@ Aria.classDefinition({
   },
 
   $statics: {
-    "SERVERIP": "172.19.250.4",
+    "SERVERIP": "10.212.97.167",
     "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
     "TEST_WALL_ID": "5689bee245f371ac1d9eb633"
   },
@@ -38,6 +38,8 @@ Aria.classDefinition({
     init: function(args, cb) {
       this.$logDebug("Init");
 
+      this._data.dialogOpen = false;
+
       this._loadWall(this.TEST_WALL_ID);
 
       // Keep going
@@ -48,25 +50,20 @@ Aria.classDefinition({
       this._loadWall(id);
     },
 
-    addPostit: function() {
-      var newPostit = {
-        name: "New postit",
-        content: "Add content ...",
-        position: {x: 0, y: 0}
-      };
+    addPostit: function(newPostit) {
       try {
         aria.core.JsonValidator.normalize({
           json: newPostit,
           beanName: "app.modules.stickywall.beans.PostitBean.Postit"
         }, true);
+        this.__wall.postits.push(newPostit);
+        if(this.wallSocket) {
+          this.wallSocket.emit('new_postit', newPostit);
+        }
       } catch (ex) {
         // The postit object does not match the bean
         this.$logError(this.INVALID_POSTIT, [id]);
         return;
-      }
-      this.__wall.postits.push(newPostit);
-      if(this.wallSocket) {
-        this.wallSocket.emit('new_postit', newPostit);
       }
     },
 

@@ -6,6 +6,7 @@
 
 	{macro main()}
     <div class="actions">
+      {call createPostitDialog() /}
       <div class="btn btn-info" {on click {fn: "onCreatePostit", scope: this}/}>Create Post-It</div>
       <div class="btn btn-danger" {on click {fn: "onDeletePostit", scope: this}/}>Delete Post-It</div>
     </div>
@@ -50,6 +51,60 @@
         }
       }
     }/}
+  {/macro}
+
+  {macro createPostitDialog()}
+    {@aria:Dialog {
+      id : "myDialog",
+      title : "Create a postit",
+      icon : "std:info",
+      minWidth : 400,
+      maxHeight : 500,
+      modal : true,
+      visible : false,
+      movable : true,
+      macro : "postitCreationDialog",
+      bind : {
+        "visible" : {
+          inside : model,
+          to : 'createDialog'
+        }
+      }
+    }/}
+  {/macro}
+
+  {macro postitCreationDialog()}
+    {@aria:Textarea {
+      label : "Nom",
+      labelPos : "left",
+      helptext : "Enter a name",
+      width : 280,
+      block : true,
+      labelWidth : 100,
+      bind : {
+        "value" : {
+          inside : this.model.postitToEdit,
+          to : 'name'
+        }
+      },
+      height : 40
+    }/}
+    {@aria:Textarea {
+      label : "Content",
+      labelPos : "left",
+      helptext : "The content of the post-it",
+      width : 280,
+      block : true,
+      labelWidth : 100,
+      bind : {
+      "value" : {
+          inside : this.model.postitToEdit,
+          to : 'content'
+        }
+      },
+      height : 40
+    }/}
+    <div class="btn btn-default" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
   {/macro}
 
   {macro postit(child)}

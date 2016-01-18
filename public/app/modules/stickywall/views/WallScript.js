@@ -9,7 +9,16 @@ Aria.tplScriptDefinition({
     this.deselect = false;
 
     this.model = {
-      postits: []
+      postits: [],
+      postitToEdit: {
+        name: "",
+        content: "",
+        position: {
+          x: 20,
+          y: 20
+        }
+      },
+      createDialog: false
     };
     this.selectedPostit = null;
     this.selectionPoint = {x: 0, y: 0};
@@ -133,7 +142,22 @@ Aria.tplScriptDefinition({
     },
 
     onCreatePostit: function(evt) {
-      this.moduleCtrl.addPostit();
+      this.model.postitToEdit.position.x = this.wallOrig.x+window.innerWidth/2;
+      this.model.postitToEdit.position.y = this.wallOrig.y+window.innerHeight/2;
+      aria.utils.Json.setValue(this.model, 'createDialog', true);
+    },
+
+    onValidateCreatePostit: function(evt) {
+      var postit = {
+        name: this.model.postitToEdit.name,
+        content: this.model.postitToEdit.content,
+        position: {
+          x: this.model.postitToEdit.position.x,
+          y: this.model.postitToEdit.position.y
+        }
+      };
+      this.$json.setValue(this.model, 'createDialog', false);
+      this.moduleCtrl.addPostit(postit);
     },
 
     onDeletePostit : function (evt) {

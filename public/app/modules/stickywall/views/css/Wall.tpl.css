@@ -12,6 +12,7 @@
     	div.postit {
     		position: absolute;
     		background-image: url('app/images/postit.png');
+            /*border: 1px solid black;*/
     		cursor: pointer;
     	}
 

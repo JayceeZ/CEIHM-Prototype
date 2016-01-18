@@ -8,9 +8,20 @@ var application_root = __dirname,
   logger = require('morgan'),
   schemas = require('./schemas.js'),
   socketio = require('socket.io'),
-  _ = require('lodash');
+  _ = require('lodash'),
+  multer = require('multer');
 
 var app = express();
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(application_root, "/../public/uploads/"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now());
+  }
+});
+var upload = multer({ destination: storage });
 
 var databaseUrl = "mongodb://127.0.0.1:27017/";
 var database = "stickywall_development";
@@ -98,6 +109,12 @@ app.get('/api/walls/', function (req, res) {
   Wall.find(function(err, results) {
     res.status(200).json(results);
   });
+});
+
+app.post('/file', upload.any(), function (req, res, next) {
+  //console.log(req.file);
+  res.status(200).json({msg: "ok"});
+  next();
 });
 
 app.listen(8000);
