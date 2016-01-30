@@ -24,7 +24,6 @@ Aria.classDefinition({
   },
 
   $statics: {
-    "SERVERIP": "localhost",
     "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
     "STORAGE_ID": "stickywall_id"
   },
@@ -62,7 +61,7 @@ Aria.classDefinition({
 
     createWall: function() {
       aria.core.IO.asyncRequest({
-        url: "http://"+this.SERVERIP+":8000/api/newwall",
+        url: "/api/newwall",
         method: "GET",
         expectedResponseType: 'json',
         callback: {
@@ -139,7 +138,7 @@ Aria.classDefinition({
     __registerWallSocket: function (wallId) {
       if (typeof io === 'undefined')
         return;
-      this.wallSocket = io('http://'+this.SERVERIP+':8001/');
+      this.wallSocket = io(':8001');
       this.wallSocket.emit('register_wall', {wallId: wallId});
       this.wallSocket.on('action_error', this.__onSocketError);
       this.wallSocket.on('disconnect', this.__onSocketDisconnect);
@@ -154,7 +153,7 @@ Aria.classDefinition({
     _loadWall: function(id) {
       this.__registerWallSocket(id);
       aria.core.IO.asyncRequest({
-        url: "http://"+this.SERVERIP+":8000/api/wall/" + id,
+        url: "/api/wall/" + id,
         method: "get",
         expectedResponseType: 'json',
         callback: {
@@ -192,7 +191,7 @@ Aria.classDefinition({
     _onWallLoaded: function(response, args) {
       this.__wall = response.responseJSON;
       if(this.validateWall(this.__wall)) {
-        this.$logDebug('Wall (' + this.__wall._id + ') loaded');
+        this.$logDebug('Wall id: ' + this.__wall._id + ' loaded');
         this.$raiseEvent({
           name: 'app.module.stickywall.wall.loaded'
         });
@@ -200,6 +199,7 @@ Aria.classDefinition({
             this.storage.setItem(this.STORAGE_ID, this.__wall._id);
       } else {
         this.$logDebug('Failure loading wall');
+        this.createWall();
       }
     },
 
@@ -210,7 +210,7 @@ Aria.classDefinition({
     __onSocketDisconnect: function() {
       console.log('Woops, disconnected !');
       this.wallSocket.close();
-      this.wallSocket = null;
+      window.reload();
     }
   }
 });
