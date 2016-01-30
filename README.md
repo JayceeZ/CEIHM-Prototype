@@ -13,9 +13,9 @@ http://ariatemplates.com/
 
 You need to start an NPM server located in server folder.
 
-1/ make sure latest version of npm is installed on your system
-2/ go into server folder with a terminal and type: npm install
-3/ start your mongodb instance with
+1. make sure latest version of npm is installed on your system
+2. go into server folder with a terminal and type: npm install
+3. start your mongodb instance with
 ```
     mongod --dbpath=datafolder/
 ```
@@ -25,8 +25,9 @@ where ``datafolder/`` is where MongoDB will store the datas
 
 Please do Installation first.
 
-1/ You can now start your server with : node index.js in folder server
-2/ Open http://localhost:8000/
+1. You can now start your server with : node index.js in folder server
+2. Open http://localhost:8000/
+
 
 # Troubleshooting
 
