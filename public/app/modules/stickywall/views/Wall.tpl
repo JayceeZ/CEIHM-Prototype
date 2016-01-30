@@ -143,7 +143,7 @@
       },
       height : 40
     }/}
-    <div class="btn btn-default" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
+    <div class="btn btn-default pull-right" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
   {/macro}
 
   {macro postit(child)}
