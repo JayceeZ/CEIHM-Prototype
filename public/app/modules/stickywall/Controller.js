@@ -5,20 +5,18 @@ Aria.classDefinition({
 
   $dependencies: [ //
     "aria.utils.Json", //
-    "app.modules.stickywall.utils.PostitUtil", //
-    "app.modules.stickywall.beans.PostitBean"
+    "app.modules.stickywall.beans.PostitBean", //
+    "aria.storage.LocalStorage"
   ],
 
   $constructor: function() {
     // call parent constructor
-    this.$ModuleCtrl.constructor.call(this);
-
-    // Utils
-    this.$postitUtil = app.modules.stickywall.utils.PostitUtil;
+    this.$ModuleCtrl.$constructor.call(this);
 
     // Wall
     this.wallSocket = null;
-    this.__wall = {name: "Undefined", postits: []};
+    this.storage = null;
+    this.__wall = {name: "New wall", postits: []};
   },
 
   $destructor: function() {
@@ -26,9 +24,9 @@ Aria.classDefinition({
   },
 
   $statics: {
-    "SERVERIP": "10.212.97.167",
+    "SERVERIP": "localhost",
     "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
-    "TEST_WALL_ID": "5689bee245f371ac1d9eb633"
+    "STORAGE_ID": "stickywall_id"
   },
 
   $prototype: {
@@ -38,9 +36,21 @@ Aria.classDefinition({
     init: function(args, cb) {
       this.$logDebug("Init");
 
-      this._data.dialogOpen = false;
-
-      this._loadWall(this.TEST_WALL_ID);
+      try {
+        this.storage = new aria.storage.LocalStorage();
+      } catch (ex) {
+        this.$logDebug('Local Storage Error: '+ ex.message);
+      }
+      if(this.storage) {
+        var storedWallId = this.storage.getItem(this.STORAGE_ID);
+        if(storedWallId) {
+          this._loadWall(storedWallId);
+        } else {
+          this.createWall();
+        }
+      } else {
+        window.reload();
+      }
 
       // Keep going
       this.$callback(cb);
@@ -48,6 +58,26 @@ Aria.classDefinition({
 
     onChangeWall: function(id) {
       this._loadWall(id);
+    },
+
+    createWall: function() {
+      aria.core.IO.asyncRequest({
+        url: "http://"+this.SERVERIP+":8000/api/newwall",
+        method: "GET",
+        expectedResponseType: 'json',
+        callback: {
+          fn: this._onWallCreated,
+          scope: this
+        }
+      });
+    },
+
+    _onWallCreated : function(response) {
+      if(!response.responseJSON) {
+        this.$logDebug('Failure creating wall');
+      }
+      this.__wall = response.responseJSON.wall;
+      this._loadWall(this.__wall._id);
     },
 
     addPostit: function(newPostit) {
@@ -62,8 +92,7 @@ Aria.classDefinition({
         }
       } catch (ex) {
         // The postit object does not match the bean
-        this.$logError(this.INVALID_POSTIT, [id]);
-        return;
+        this.$logError(this.INVALID_POSTIT, [newPostit.id]);
       }
     },
 
@@ -92,6 +121,10 @@ Aria.classDefinition({
 
     getPostits: function() {
       return _.clone(this.__wall.postits, true);
+    },
+
+    getWallName: function() {
+      return this.__wall.name;
     },
 
     __onSocketError : function(data) {
@@ -126,10 +159,7 @@ Aria.classDefinition({
         expectedResponseType: 'json',
         callback: {
           fn: this._onWallLoaded,
-          scope: this,
-          args: {
-            callback: this._onWallLoaded
-          }
+          scope: this
         }
       });
     },
@@ -161,10 +191,20 @@ Aria.classDefinition({
 
     _onWallLoaded: function(response, args) {
       this.__wall = response.responseJSON;
-      this.$logDebug('Wall ('+this.__wall._id+') loaded');
-      this.$raiseEvent({
-        name: 'app.module.stickywall.wall.loaded'
-      });
+      if(this.validateWall(this.__wall)) {
+        this.$logDebug('Wall (' + this.__wall._id + ') loaded');
+        this.$raiseEvent({
+          name: 'app.module.stickywall.wall.loaded'
+        });
+        if(this.storage)
+            this.storage.setItem(this.STORAGE_ID, this.__wall._id);
+      } else {
+        this.$logDebug('Failure loading wall');
+      }
+    },
+
+    validateWall : function(wall) {
+      return (wall && wall._id && wall.name && wall.postits);
     },
 
     __onSocketDisconnect: function() {

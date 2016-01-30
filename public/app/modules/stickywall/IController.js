@@ -8,6 +8,7 @@ Aria.interfaceDefinition({
     'app.module.stickywall.wall.postit.removed' : 'Raised when a postit have been removed'
   },
   $interface: {
+    getWallName: function() {},
     getPostits: function() {},
     updatePostit: function(id, name, content, x, y) {},
     addPostit: function(id, postit) {},

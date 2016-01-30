@@ -9,6 +9,7 @@ Aria.tplScriptDefinition({
     this.deselect = false;
 
     this.model = {
+      name: "",
       postits: [],
       postitToEdit: {
         name: "",
@@ -26,6 +27,7 @@ Aria.tplScriptDefinition({
 
   $prototype: {
     $dataReady: function() {
+      this.model.name = this.moduleCtrl.getWallName();
       this.__extractPostits();
     },
 
@@ -152,8 +154,8 @@ Aria.tplScriptDefinition({
         name: this.model.postitToEdit.name,
         content: this.model.postitToEdit.content,
         position: {
-          x: this.model.postitToEdit.position.x,
-          y: this.model.postitToEdit.position.y
+          x: Math.floor(this.model.postitToEdit.position.x),
+          y: Math.floor(this.model.postitToEdit.position.y)
         }
       };
       this.$json.setValue(this.model, 'createDialog', false);

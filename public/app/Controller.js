@@ -6,7 +6,7 @@ Aria.classDefinition({
 
   $constructor: function() {
     // call parent constructor
-    this.$ModuleCtrl.constructor.call(this);
+    this.$ModuleCtrl.$constructor.call(this);
 
     this.setData({});
   },
@@ -28,6 +28,10 @@ Aria.classDefinition({
         view: "app.modules.stickywall.views.Wall",
         ctrl: "app.modules.stickywall.Controller"
       });
+    },
+
+    onModuleEvent : function(event) {
+      this.$logDebug('Module event' + event);
     }
   }
 });

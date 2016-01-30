@@ -88,15 +88,8 @@ app.get('/api/wall/:id', function (req, res) {
   });
 });
 
-app.put('/api/wall/new', function (req, res) {
-  if(!req.accepts('application/json'))
-    return;
-  var reqJson = req.body;
-
-  var name = reqJson.name;
-  var postits = reqJson.postits;
-
-  var newWall = new Wall({name: name, postits: postits});
+app.get('/api/newwall', function (req, res) {
+  var newWall = new Wall({name: "New Wall", postits: []});
   newWall.save(function (err) {
     if (err)
       res.status(500).json({ message: 'Request is malformed' });
