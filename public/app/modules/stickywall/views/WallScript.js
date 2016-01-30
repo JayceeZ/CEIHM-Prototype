@@ -6,7 +6,6 @@ Aria.tplScriptDefinition({
     this.wallOrig = {x: 0, y: 0};
     this.wallMove = false;
     this.mouseDown = false;
-    this.deselect = false;
 
     this.model = {
       name: "",
@@ -16,7 +15,8 @@ Aria.tplScriptDefinition({
         content: "",
         position: {
           x: 20,
-          y: 20
+          y: 20,
+          z: 0
         }
       },
       createDialog: false
@@ -40,9 +40,10 @@ Aria.tplScriptDefinition({
       var postit = child.item;
       var posX = postit.position.x + this.wallOrig.x;
       var posY = postit.position.y + this.wallOrig.y;
+      var posZ = postit.position.z;
       return {
         classList: ["postit"],
-        style: "left: " + posX + "px; top: " + posY + "px;"
+        style: "left: " + posX + "px; top: " + posY + "px; z-index: "+posZ
       };
     },
 
@@ -60,19 +61,14 @@ Aria.tplScriptDefinition({
         if (exSelect)
           this._updatePostit(exSelect);
         this._updatePostit(child.index);
-      } else {
-        this.deselect = true;
       }
     },
 
     onPostitMouseUp:  function(evt, child) {
       this.mouseDown = false;
-      if (this.deselect) {
-        this.selectedPostit = null;
-        this._updatePostit(child.index);
-        this.onWallSave();
-        this.deselect = false;
-      }
+      this.selectedPostit = null;
+      this._updatePostit(child.index);
+      this.saveWall(child.index);
     },
 
     onPostitTouchStart: function(evt, child) {
@@ -91,7 +87,7 @@ Aria.tplScriptDefinition({
       } else {
         this.selectedPostit = null;
         this._updatePostit(child.index);
-        this.onWallSave();
+        this.saveWall(child.index);
       }
     },
 
@@ -104,8 +100,7 @@ Aria.tplScriptDefinition({
         var i = this.selectedPostit;
         this.selectedPostit = null;
         this._updatePostit(i);
-        this.onWallSave();
-        this.deselect = false;
+        this.saveWall(i);
       }
     },
 
@@ -117,8 +112,6 @@ Aria.tplScriptDefinition({
     },
 
     _updatePostit: function(id, data) {
-      // refresh in repeater
-
       var postit = this.model.postits[id];
       if (data)
         postit = data;
@@ -136,8 +129,8 @@ Aria.tplScriptDefinition({
     },
 
     moveWall: function(dx, dy) {
-      this.wallOrig.x += dx;
-      this.wallOrig.y += dy;
+      this.$json.setValue(this.wallOrig, "x", this.wallOrig.x+dx);
+      this.$json.setValue(this.wallOrig, "y", this.wallOrig.y+dy);
       for (var i = 0; i < this.model.postits.length; i++) {
         this._updatePostit(i);
       }
@@ -168,10 +161,17 @@ Aria.tplScriptDefinition({
       this.selectedPostit = null;
     },
 
-    onWallSave: function(evt) {
-      _.forEach(this.model.postits, function(postit, id) {
-        this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.position.x, postit.position.y);
-      }, this);
+    saveWall: function(index) {
+      if(index || index === 0) {
+        // the postit is saved
+        var postit = this.model.postits[index];
+        this.moduleCtrl.updatePostit(index, postit.name, postit.content, postit.position.x, postit.position.y);
+      } else {
+        // everything is saved
+        _.forEach(this.model.postits, function (postit, id) {
+          this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.position.x, postit.position.y);
+        }, this);
+      }
     },
 
     onWallMouseMove: function(evt) {
@@ -226,7 +226,7 @@ Aria.tplScriptDefinition({
         this._updatePostit(exSelect);
       }
       this.wallMove = false;
-      this.onWallSave();
+      this.saveWall();
     },
 
     onModuleEvent: function(evt) {

@@ -41,7 +41,28 @@
         recursive : false
       }]
     }/}
+    {section {
+      id : "compass",
+      macro : "compass",
+      bindRefreshTo: [{
+        to : "x",
+        inside : wallOrig,
+        recursive : false
+      },
+      {
+        to : "y",
+        inside : wallOrig,
+        recursive : false
+      }]
+    }/}
 	{/macro}
+
+  {macro compass()}
+    <div class="compass">
+      x: ${wallOrig.x}<br />
+      y: ${wallOrig.y}
+    </div>
+  {/macro}
 
   {macro postits()}
     {repeater {
