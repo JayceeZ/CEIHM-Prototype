@@ -14,14 +14,12 @@ var application_root = __dirname,
 var app = express();
 
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(application_root, "/../public/uploads/"));
-  },
+  destination: "./data/",
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now());
+    cb(null, file.originalname + '-' + Date.now());
   }
 });
-var upload = multer({ destination: storage });
+var upload = multer({ storage: storage });
 
 var databaseUrl = "mongodb://127.0.0.1:27017/";
 var database = "stickywall_development";
@@ -104,10 +102,13 @@ app.get('/api/walls/', function (req, res) {
   });
 });
 
-app.post('/file', upload.any(), function (req, res, next) {
-  //console.log(req.file);
-  res.status(200).json({msg: "ok"});
-  next();
+app.post('/api/file', upload.array('file'), function (req, res, next) {
+  console.log("received " + req.files.length + " files");// form files
+  for(var i=0; i < req.files.length; i++) {
+    console.log("### " + req.files[i].path);
+  }
+
+  res.status(204).end();
 });
 
 app.listen(8000);

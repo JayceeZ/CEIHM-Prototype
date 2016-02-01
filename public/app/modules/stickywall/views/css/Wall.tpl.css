@@ -12,6 +12,7 @@
     	div.postit {
     		position: absolute;
 			box-shadow: 1px 2px 2px 2px rgba(0, 0, 0, 0.7);
+			background-color: #FFFFFF;
     		cursor: pointer;
     	}
 
@@ -21,10 +22,6 @@
     		top: 0.5em;
     		right: 1em;
     	}
-
-		div.postit {
-			background-color: #FFFFFF;
-		}
 
     	div.selected {
     		overflow: hidden;
@@ -36,6 +33,10 @@
     		height: 100%;
 			cursor: move;
     	}
+
+		div.draggable.selected {
+			border: 5px solid black;
+		}
 
     	div.postit div.name {
     		font-weight: bold;

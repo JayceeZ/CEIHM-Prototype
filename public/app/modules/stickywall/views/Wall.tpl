@@ -148,13 +148,13 @@
 
   {macro postit(child)}
     {var postit = child.item /}
-    {var selected = (child.index === selectedPostit) ? "selected" : "" /}
+    {var selected = isSelected(child.index) ? "selected" : "" /}
 
     <div class="draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
         {on mouseup {fn: "onPostitMouseUp", args: child, scope: this}/}
-        {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
-        {on mousemove {fn: "onWallMouseMove", scope: this}/}>
+        {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}>
+      <div class="checkmark"></div>
       <div class="name">
         ${postit.name}
       </div>

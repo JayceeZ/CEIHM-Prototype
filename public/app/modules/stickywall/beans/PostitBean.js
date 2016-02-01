@@ -20,10 +20,6 @@ Aria.beanDefinitions({
           $description: "Content of the postit",
           $mandatory: true
         },
-        "history": {
-          $type: "history:History",
-          $description: "History of the postit"
-        },
         "position": {
           $type: "json:Object",
           $description: "Position of the post-it",
