@@ -150,10 +150,12 @@
     {var postit = child.item /}
     {var selected = isSelected(child.index) ? "selected" : "" /}
 
-    <div class="draggable ${selected}" 
+    <div id="postit-${child.index}" class="draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
         {on mouseup {fn: "onPostitMouseUp", args: child, scope: this}/}
-        {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}>
+        {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
+        {on touchmove {fn: "onPostitTouchMove", args: child, scope: this}/}
+        {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}>
       <div class="checkmark"></div>
       <div class="name">
         ${postit.name}

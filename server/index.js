@@ -124,7 +124,7 @@ ioServer.on('connection', function (socket) {
   socket.on('register_wall', function (data) {
     var wallId = data.wallId;
     socket.join(wallId);
-    console.log('Client '+socket.id+' associated to wall '+ wallId + ' with ');
+    console.log('Client '+socket.id+' associated to wall '+ wallId);
     socket.emit('wall_registered');
   });
 
@@ -179,7 +179,6 @@ ioServer.on('connection', function (socket) {
               postitUpdate.status = 'ERROR: Wall not saved';
             else {
               postitUpdate.status = 'SUCCESS: Wall saved successfully';
-              socket.emit('postit_updated', postitUpdate);
               socket.to(wallId).emit('postit_updated', postitUpdate);
             }
           }, this);
