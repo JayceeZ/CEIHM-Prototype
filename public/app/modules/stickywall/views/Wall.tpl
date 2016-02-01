@@ -35,6 +35,14 @@
 		{section {
       id : "wall",
       macro : "postits",
+      on: {
+        mousedown: {fn: "onWallMouseDown", scope: this},
+        mouseup: {fn: "onWallMouseUp", scope: this},
+        mousemove: {fn: "onWallMouseMove", scope: this},
+        touchstart: {fn: "onWallTouchStart", scope: this},
+        touchmove: {fn: "onWallTouchMove", scope: this},
+        touchend: {fn: "onWallTouchEnd", scope: this}
+      },
       bindRefreshTo: [{
         to : "postits",
         inside : model,
@@ -71,14 +79,6 @@
       type: "div",
       attributes: {
         classList: ["wall"],
-      },
-      on: {
-        mousedown: {fn: "onWallMouseDown", scope: this},
-        mouseup: {fn: "onWallMouseUp", scope: this},
-        mousemove: {fn: "onWallMouseMove", scope: this},
-        touchstart: {fn: "onWallTouchStart", scope: this},
-        touchmove: {fn: "onWallTouchMove", scope: this},
-        touchend: {fn: "onWallTouchEnd", scope: this}
       },
       childSections : {
         id: "postit",
