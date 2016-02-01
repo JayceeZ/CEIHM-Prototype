@@ -274,9 +274,11 @@ Aria.tplScriptDefinition({
     },
 
     onDeletePostit : function (evt) {
-      if(this.selectedPostit !== null)
-        this.moduleCtrl.deletePostit(this.selectedPostit);
-      this.selectedPostit = null;
+      _.forEach(this.selectedPostits, function(ign, i) {
+        if(ign)
+          this.moduleCtrl.deletePostit(i);
+      },this);
+      this.selectedPostits = [];
     },
 
     saveWall: function(index) {
