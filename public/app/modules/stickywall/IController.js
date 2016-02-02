@@ -10,7 +10,7 @@ Aria.interfaceDefinition({
   $interface: {
     getWallName: function() {},
     getPostits: function() {},
-    updatePostit: function(id, name, content, x, y) {},
+    updatePostit: function(id, name, content, file, x, y) {},
     addPostit: function(id, postit) {},
     deletePostit: function(id) {}
   }

@@ -14,9 +14,9 @@ var application_root = __dirname,
 var app = express();
 
 var storage = multer.diskStorage({
-  destination: "./data/",
+  destination: "./../public/uploads/",
   filename: function (req, file, cb) {
-    cb(null, file.originalname + '-' + Date.now());
+    cb(null, Date.now() +"-"+ file.originalname);
   }
 });
 var upload = multer({ storage: storage });
@@ -108,7 +108,7 @@ app.post('/api/file', upload.array('file'), function (req, res, next) {
     console.log("### " + req.files[i].path);
   }
 
-  res.status(204).end();
+  res.status(200).json({url: "uploads/"+req.files[0].filename});
 });
 
 app.listen(8000);

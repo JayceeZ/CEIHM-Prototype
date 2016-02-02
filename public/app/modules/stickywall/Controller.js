@@ -101,7 +101,7 @@ Aria.classDefinition({
       }
     },
 
-    updatePostit: function(id, name, content, x, y) {
+    updatePostit: function(id, name, content, file, x, y) {
       if(!id && id !== 0)
         return;
       if(name && name !== this.__wall.postits[id].name)

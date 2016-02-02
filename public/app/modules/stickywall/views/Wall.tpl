@@ -97,8 +97,6 @@
       id : "myDialog",
       title : "Create a postit",
       icon : "std:info",
-      minWidth : 400,
-      maxHeight : 500,
       modal : true,
       visible : false,
       movable : true,
@@ -114,10 +112,9 @@
 
   {macro postitCreationDialog()}
     {@aria:Textarea {
-      label : "Nom",
+      label : "Name",
       labelPos : "left",
-      helptext : "Enter a name",
-      width : 280,
+      helptext : "The title of the post-it",
       block : true,
       labelWidth : 100,
       bind : {
@@ -125,14 +122,12 @@
           inside : this.model.postitToEdit,
           to : 'name'
         }
-      },
-      height : 40
+      }
     }/}
     {@aria:Textarea {
       label : "Content",
       labelPos : "left",
       helptext : "The content of the post-it",
-      width : 280,
       block : true,
       labelWidth : 100,
       bind : {
@@ -141,9 +136,16 @@
           to : 'content'
         }
       },
-      height : 40
+      height : 150
     }/}
-    <div class="btn btn-default pull-right" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
+    {@aria:Link {
+      label: "Import a file",
+      onclick: onImportFile
+    }/}
+    <form style="display: none;" enctype="multipart/form-data" name="formSubmit" id="formSubmit">
+      <input type="file" id="fileUpload" name="file" {on change onFileChosen /} />
+    </form>
+    <div class="btn btn-default" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
   {/macro}
 
   {macro postit(child)}
@@ -157,12 +159,16 @@
         {on touchmove {fn: "onPostitTouchMove", args: child, scope: this}/}
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}>
       <div class="checkmark"></div>
+      {if postit.file }
+        <img src="${postit.file}" alt="${postit.file}" />
+      {else/}
       <div class="name">
         ${postit.name}
       </div>
       <div class="content">
         ${postit.content}
       </div>
+      {/if}
     </div>
   {/macro}
 

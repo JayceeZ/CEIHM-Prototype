@@ -1,6 +1,6 @@
 Aria.tplScriptDefinition({
   $classpath: 'app.modules.stickywall.views.WallScript',
-  $dependencies: ['aria.utils.Json', 'aria.utils.Event'],
+  $dependencies: ['aria.utils.Json', 'aria.utils.Event', 'aria.core.IO'],
 
   $constructor: function() {
     this.wallOrig = {x: 0, y: 0};
@@ -262,6 +262,7 @@ Aria.tplScriptDefinition({
       var postit = {
         name: this.model.postitToEdit.name,
         content: this.model.postitToEdit.content,
+        file: this.model.postitToEdit.associatedFile,
         position: {
           x: Math.floor(this.model.postitToEdit.position.x),
           y: Math.floor(this.model.postitToEdit.position.y)
@@ -269,6 +270,7 @@ Aria.tplScriptDefinition({
       };
       this.model.postitToEdit.name = "";
       this.model.postitToEdit.content = "";
+      this.model.postitToEdit.associatedFile = "";
       this.$json.setValue(this.model, 'createDialog', false);
       this.moduleCtrl.addPostit(postit);
     },
@@ -285,17 +287,48 @@ Aria.tplScriptDefinition({
       if(index || index === 0) {
         // the postit is saved
         var postit = this.model.postits[index];
-        this.moduleCtrl.updatePostit(index, postit.name, postit.content, postit.position.x, postit.position.y);
+        this.moduleCtrl.updatePostit(index, postit.name, postit.content, postit.file, postit.position.x, postit.position.y);
       } else {
         // everything is saved
         _.forEach(this.model.postits, function (postit, id) {
-          this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.position.x, postit.position.y);
+          this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.file, postit.position.x, postit.position.y);
         }, this);
       }
     },
 
     isSelected: function(index) {
       return (this.selectedPostits[index] && this.selectedPostits[index] !== null);
+    },
+
+    onImportFile: function() {
+      var fileInput = aria.utils.Dom.getElementById("fileUpload");
+      fileInput.click();
+    },
+
+    onFileChosen: function() {
+      var url = "/api/file";
+      // simulate async request to submit form
+      aria.core.IO.asyncFormSubmit({
+        url : url,
+        method : "POST",
+        formId : "formSubmit",
+        expectedResponseType: 'json',
+        callback : {
+          fn : this.onFileUploadSuccess,
+          onerror : this.onFileUploadError,
+          scope : this
+        }
+      });
+    },
+
+    onFileUploadSuccess : function(res) {
+      var rep = res.responseJSON;
+      this.$logDebug('File uploaded at ' + rep.url);
+      this.model.postitToEdit.associatedFile = rep.url;
+    },
+
+    onFileUploadError : function(res) {
+      this.$logDebug('File upload error');
     },
 
     onModuleEvent: function(evt) {

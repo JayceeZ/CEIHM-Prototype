@@ -20,6 +20,10 @@ Aria.beanDefinitions({
           $description: "Content of the postit",
           $mandatory: true
         },
+        "file": {
+          $type: "json:String",
+          $description: "File of the postit"
+        },
         "position": {
           $type: "json:Object",
           $description: "Position of the post-it",
