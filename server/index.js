@@ -65,6 +65,9 @@ app.use( function(req, res, next) {
   next();
 });
 
+// Socket server (used in API)
+var ioServer = socketio(8001);
+
 /**
  * REST API
  */
@@ -102,25 +105,38 @@ app.get('/api/walls/', function (req, res) {
   });
 });
 
-app.post('/api/file', upload.array('file'), function (req, res, next) {
-  console.log("received " + req.files.length + " files");// form files
-  for(var i=0; i < req.files.length; i++) {
-    console.log("### " + req.files[i].path);
-  }
+app.post('/api/wall/:id/postit', upload.single('file'), function (req, res, next) {
+  console.log("Received " + req.file.length + " file for postit");// form files
+  console.log("File uploaded to " + req.file.path);
 
-  res.status(200).json({url: "uploads/"+req.files[0].filename});
+  var id = req.params.id;
+  var newPostit = {
+    name: req.file.filename,
+    position: {
+      x: 200,
+      y: 200
+    },
+    file: "uploads/"+req.file.filename
+  };
+
+  Wall.findOne({ _id: id }, function(err, result) {
+    if(err)
+      res.status(400).json("An error occurred: " + err);
+    if(result) {
+      result.postits.push(newPostit);
+      ioServer.sockets.to(id).emit('postit_added', newPostit);
+      result.save();
+      res.status(200).json("Postit added to wall: " + id);
+    } else {
+      res.status(404).json("Wall not found");
+    }
+  });
 });
-
-app.listen(8000);
 
 /**
  * Sockets API
  */
-var ioServer = socketio(8001);
-
 ioServer.on('connection', function (socket) {
-  var connectedClients = [];
-
   socket.on('register_wall', function (data) {
     var wallId = data.wallId;
     socket.join(wallId);
@@ -241,3 +257,6 @@ ioServer.on('connection', function (socket) {
     console.log('Client '+socket.id+' disconnected');
   });
 });
+
+// Start server
+app.listen(8000);
