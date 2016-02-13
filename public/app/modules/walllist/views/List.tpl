@@ -42,9 +42,9 @@
 
   {macro wallItem(child)}
     {var wall = child.item /}
-    <a class="expand" {on click { fn: "loadWall", scope: this, args: [wall._id]} /}>
+    <a class="expand" href="#" {on click { fn: "loadWall", scope: this, args: [wall._id]} /}>
     ${wall.name}
-    <span class="label label-default label-pill pull-right">${wall.postits.length}</span>
+    <span class="label label-default label-pill pull-right">${wall.postits.length} post-its</span>
   {/macro}
 
 {/Template}

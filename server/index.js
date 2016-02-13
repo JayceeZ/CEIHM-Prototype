@@ -106,7 +106,7 @@ app.get('/api/walls/', function (req, res) {
 });
 
 app.post('/api/wall/:id/postit', upload.single('file'), function (req, res, next) {
-  console.log("Received " + req.file.length + " file for postit");// form files
+  console.log("Received a file for postit");// form files
   console.log("File uploaded to " + req.file.path);
 
   var id = req.params.id;
