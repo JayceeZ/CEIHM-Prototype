@@ -23,6 +23,17 @@
     		right: 1em;
     	}
 
+        div.create-postit {
+            position: absolute;
+            right: 20px;
+            z-index: 1000;
+            
+            background-image: url('images/create_postit.png');
+            background-size: 97px 97px;
+            width: 97px;
+            height: 97px;
+        }
+
     	div.selected {
     		overflow: hidden;
     	}

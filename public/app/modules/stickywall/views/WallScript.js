@@ -20,7 +20,8 @@ Aria.tplScriptDefinition({
           z: 0
         }
       },
-      createDialog: false
+      createDialog: false,
+      hideActions: false
     };
     this.selectedPostits = [];
     this.selectionPoint = {x: 0, y: 0};
@@ -33,6 +34,10 @@ Aria.tplScriptDefinition({
       this.moduleCtrl.loadWall(this.data.parentData.wall.id);
       this.model.name = this.moduleCtrl.getWallName();
       this.__extractPostits();
+    },
+
+    setActionsVisible: function(boolean) {
+      this.$json.setValue(this.model, "hideActions", !boolean);
     },
 
     /**
@@ -64,6 +69,7 @@ Aria.tplScriptDefinition({
       // stocke le point de prise sur le post-it
       this.selectionPoint = {x: evt.clientX, y: evt.clientY};
 
+      this.setActionsVisible(false);
       this._refreshPostit(child.index);
     },
 
@@ -82,6 +88,7 @@ Aria.tplScriptDefinition({
       }
       this.selectionPoint = false;
       this.justSelected = false;
+      this.setActionsVisible(true);
     },
 
     onWallMouseDown: function(evt) {
@@ -98,6 +105,7 @@ Aria.tplScriptDefinition({
             this._refreshPostit(i);
         }, this);
       }
+      this.setActionsVisible(false);
     },
 
     onWallMouseMove: function(evt) {
@@ -132,6 +140,7 @@ Aria.tplScriptDefinition({
       this.$logDebug("MouseDown Wall");
       evt.preventDefault(true);
       this.wallMove = false;
+      this.setActionsVisible(true);
     },
 
     onPostitTouchStart: function(evt, child) {
@@ -141,6 +150,7 @@ Aria.tplScriptDefinition({
       // stocke le point de prise sur le post-it
       this.selectionPoint = {x: evt.touches[0].clientX, y: evt.touches[0].clientY};
       this.postitMove = false;
+      this.setActionsVisible(false);
     },
 
     onPostitTouchMove: function(evt) {
@@ -178,6 +188,7 @@ Aria.tplScriptDefinition({
         this.selectedPostits[child.index] = undefined;
       }
       this._refreshPostit(child.index);
+      this.setActionsVisible(true);
     },
 
     onWallTouchStart: function(evt) {
@@ -195,6 +206,7 @@ Aria.tplScriptDefinition({
       }
       // Wall interactions
       this.wallMove = {x: evt.touches[0].clientX, y: evt.touches[0].clientY};
+      this.setActionsVisible(false);
     },
 
     onWallTouchMove: function(evt) {
@@ -215,6 +227,7 @@ Aria.tplScriptDefinition({
         return;
 
       this.wallMove = false;
+      this.setActionsVisible(true);
     },
 
     _refreshPostitPositionStyle: function(id) {

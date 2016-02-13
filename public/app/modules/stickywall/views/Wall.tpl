@@ -7,11 +7,28 @@
 	{macro main()}
     <div class="actions">
       {call createPostitDialog() /}
-      <div class="btn btn-info" {on click {fn: "onCreatePostit", scope: this}/}>Create Post-It</div>
       <div class="btn btn-danger" {on click {fn: "onDeletePostit", scope: this}/}>Delete Post-It</div>
     </div>
+    {section {
+        id: "floatings",
+        macro: "floatingActions",
+        bindRefreshTo: [
+          {
+            to: "hideActions",
+            inside: model,
+            recursive: false
+          }
+        ]
+      }
+    /}
 		{call buildWall() /}
 	{/macro}
+
+  {macro floatingActions()}
+    {if model.hideActions === false}
+      <div class="create-postit" {on click {fn: "onCreatePostit", scope: this}/}></div>
+    {/if}
+  {/macro}
 
 	{macro buildWall()}
 		{section {
