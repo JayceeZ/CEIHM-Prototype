@@ -5,8 +5,7 @@ Aria.classDefinition({
 
   $dependencies: [ //
     "aria.utils.Json", //
-    "app.modules.stickywall.beans.PostitBean", //
-    "aria.storage.LocalStorage"
+    "app.modules.stickywall.beans.PostitBean"
   ],
 
   $constructor: function() {
@@ -24,8 +23,7 @@ Aria.classDefinition({
   },
 
   $statics: {
-    "INVALID_POSTIT": "Post-it %1 does not respect Bean structure",
-    "STORAGE_ID": "stickywall_id"
+    "INVALID_POSTIT": "Post-it %1 does not respect Bean structure"
   },
 
   $prototype: {
@@ -179,8 +177,6 @@ Aria.classDefinition({
         this.$raiseEvent({
           name: 'app.module.stickywall.wall.loaded'
         });
-        if(this.storage)
-            this.storage.setItem(this.STORAGE_ID, this.__wall._id);
       } else {
         this.$logDebug('Failure loading wall');
         this.createWall();

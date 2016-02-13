@@ -2,7 +2,7 @@ Aria.classDefinition({
   $classpath: "app.Controller",
   $extends: "aria.templates.ModuleCtrl",
   $implements: ["app.IController"],
-  $dependencies: ["aria.utils.Json"],
+  $dependencies: ["aria.utils.Json", "aria.storage.LocalStorage"],
 
   $constructor: function() {
     // call parent constructor
@@ -11,13 +11,16 @@ Aria.classDefinition({
     this.modules = [];
     this.setData({
       wall: {
-        name: "",
         id: null
       }
     });
   },
   $destructor: function() {
     this.$ModuleCtrl.$destructor.call(this);
+  },
+
+  $statics: {
+    "STORAGE_ID": "stickywall_id"
   },
 
   $prototype: {
@@ -40,9 +43,25 @@ Aria.classDefinition({
         ctrl: "app.modules.stickywall.Controller"
       });
 
-      this.$callback(cb);
+      try {
+        this.storage = new aria.storage.LocalStorage();
+      } catch (ex) {
+        this.$logDebug('Local Storage Error: '+ ex.message);
+      }
+      if(this.storage) {
+        var storedWallId = this.storage.getItem(this.STORAGE_ID);
+        if(storedWallId) {
+          this._data.wall.id = storedWallId;
+        }
+      } else {
+        window.reload();
+      }
 
-      this.loadModule("walllist");
+      this.$callback(cb);
+      if(this._data.wall.id !== null)
+        this.loadModule("stickywall");
+      else
+        this.loadModule("walllist");
     },
 
     loadModule: function(id) {
@@ -60,6 +79,8 @@ Aria.classDefinition({
     loadWall: function(id) {
       this.$logDebug('Loading wall '+id);
       this._data.wall.id = id;
+      if(this.storage)
+        this.storage.setItem(this.STORAGE_ID, id);
       this.$raiseEvent({
         name: "app.submodule.load",
         id: this.modules[1].id,

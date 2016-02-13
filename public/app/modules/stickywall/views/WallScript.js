@@ -29,6 +29,7 @@ Aria.tplScriptDefinition({
 
   $prototype: {
     $dataReady: function() {
+      this.moduleCtrl.setData(this.data);
       this.moduleCtrl.loadWall(this.data.parentData.wall.id);
       this.model.name = this.moduleCtrl.getWallName();
       this.__extractPostits();
