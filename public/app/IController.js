@@ -6,6 +6,7 @@ Aria.interfaceDefinition({
     'app.module.stickywall.wall.loaded' : 'Raised when the stickywall controller have loaded a wall'
   },
   $interface: {
-    loadWall: function(id) {}
+    loadWall: function(id) {},
+    loadModule: function(id) {}
   }
 });

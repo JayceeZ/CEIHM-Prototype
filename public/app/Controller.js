@@ -42,11 +42,17 @@ Aria.classDefinition({
 
       this.$callback(cb);
 
+      this.loadModule("walllist");
+    },
+
+    loadModule: function(id) {
+      var module = _.find(this.modules, {id: id});
+
       this.$raiseEvent({
         name: "app.submodule.load",
-        id: this.modules[0].id,
-        view: this.modules[0].view,
-        ctrl: this.modules[0].ctrl,
+        id: module.id,
+        view: module.view,
+        ctrl: module.ctrl,
         parentCtrl: this
       });
     },

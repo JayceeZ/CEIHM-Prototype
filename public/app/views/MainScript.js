@@ -26,8 +26,9 @@ Aria.tplScriptDefinition({
       });
     },
 
-    loadModule: function(evt, id) {
-      this.$logDebug('Requested module '+ id);
+    loadModule: function(evt, args) {
+      this.$logDebug('Requested module '+ args[0]);
+      this.moduleCtrl.loadModule(args[0]);
     },
 
     isActive: function(moduleid) {
