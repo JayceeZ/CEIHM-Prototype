@@ -20,8 +20,8 @@ Aria.tplScriptDefinition({
           z: 0
         },
         size: {
-          width: 40,
-          height: 40
+          width: 100,
+          height: 100
         }
       },
       createDialog: false,
@@ -54,22 +54,10 @@ Aria.tplScriptDefinition({
       var posX = postit.position.x + this.wallOrig.x;
       var posY = postit.position.y + this.wallOrig.y;
       var posZ = postit.position.z || 0;
-      var size = "";
 
-      if (postit.size) {
-        size += " overflow: hidden;";
-        var width = postit.size.width;
-        if (width) {
-          size += " width: " + width + "px;";
-        }
-        var height = postit.size.height;
-        if (height) {
-          size += " height: " + height + "px;";
-        }
-      }
       return {
         classList: ["postit"],
-        style: "left: " + posX + "px; top: " + posY + "px; z-index: " + posZ + "; " + size
+        style: "left: " + posX + "px; top: " + posY + "px; z-index: " + posZ + ";"
       };
     },
 
@@ -341,6 +329,10 @@ Aria.tplScriptDefinition({
         position: {
           x: Math.floor(this.model.postitToEdit.position.x),
           y: Math.floor(this.model.postitToEdit.position.y)
+        },
+        size: {
+          width: this.model.postitToEdit.size.width,
+          height:  this.model.postitToEdit.size.height
         }
       };
       this.model.postitToEdit.name = "";
