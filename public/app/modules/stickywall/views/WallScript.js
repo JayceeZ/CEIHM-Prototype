@@ -49,7 +49,7 @@ Aria.tplScriptDefinition({
       var postit = child.item;
       var posX = postit.position.x + this.wallOrig.x;
       var posY = postit.position.y + this.wallOrig.y;
-      var posZ = postit.position.z;
+      var posZ = postit.position.z || 0;
       return {
         classList: ["postit"],
         style: "left: " + posX + "px; top: " + posY + "px; z-index: "+posZ
@@ -89,6 +89,29 @@ Aria.tplScriptDefinition({
       this.selectionPoint = false;
       this.justSelected = false;
       this.setActionsVisible(true);
+    },
+
+    onPostitUpClick : function(evt, child) {
+      evt.preventDefault(true);
+      var postit = child.item;
+      if(postit.position.z || postit.position.z === 0)
+        if(postit.position.z < this.model.postits.length)
+          postit.position.z++;
+      else
+        postit.position.z = 1;
+      this._refreshPostit(child.index);
+      this.saveWall(child.index);
+    },
+
+    onPostitDownClick : function(evt, child) {
+      evt.preventDefault(true);
+      var postit = child.item;
+      if(postit.position.z && postit.position.z > 0)
+        postit.position.z--;
+      else
+        postit.position.z = 0;
+      this._refreshPostit(child.index);
+      this.saveWall(child.index);
     },
 
     onWallMouseDown: function(evt) {
@@ -302,11 +325,11 @@ Aria.tplScriptDefinition({
       if(index || index === 0) {
         // the postit is saved
         var postit = this.model.postits[index];
-        this.moduleCtrl.updatePostit(index, postit.name, postit.content, postit.file, postit.position.x, postit.position.y);
+        this.moduleCtrl.updatePostit(index, postit.name, postit.content, postit.file, postit.position.x, postit.position.y, postit.position.z);
       } else {
         // everything is saved
         _.forEach(this.model.postits, function (postit, id) {
-          this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.file, postit.position.x, postit.position.y);
+          this.moduleCtrl.updatePostit(id, postit.name, postit.content, postit.file, postit.position.x, postit.position.y, postit.position.z);
         }, this);
       }
     },

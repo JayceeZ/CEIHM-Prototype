@@ -187,6 +187,7 @@ ioServer.on('connection', function (socket) {
             if (id === postitUpdate.id) {
               postit.position.x = postitUpdate.position.x;
               postit.position.y = postitUpdate.position.y;
+              postit.position.z = postitUpdate.position.z;
               postitUpdate.postit = postit;
             }
           }, this);

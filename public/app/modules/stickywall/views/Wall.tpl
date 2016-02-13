@@ -151,13 +151,16 @@
     {var postit = child.item /}
     {var selected = isSelected(child.index) ? "selected" : "" /}
 
+    <div class="postit-actions ${selected}">
+      <div class="up" {on click {fn: "onPostitUpClick", args: child, scope: this}/}></div>
+      <div class="down" {on click {fn: "onPostitDownClick", args: child, scope: this}/}></div>
+    </div>
     <div id="postit-${child.index}" class="draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
         {on mouseup {fn: "onPostitMouseUp", args: child, scope: this}/}
         {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
         {on touchmove {fn: "onPostitTouchMove", args: child, scope: this}/}
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}>
-      <div class="checkmark"></div>
       {if postit.file }
         <img src="${postit.file}" alt="${postit.file}" />
       {else/}

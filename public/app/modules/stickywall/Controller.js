@@ -83,7 +83,7 @@ Aria.classDefinition({
       }
     },
 
-    updatePostit: function(id, name, content, file, x, y) {
+    updatePostit: function(id, name, content, file, x, y, z) {
       if(!id && id !== 0)
         return;
       if(name && name !== this.__wall.postits[id].name)
@@ -96,8 +96,10 @@ Aria.classDefinition({
         this.__wall.postits[id].position.x = x;
       if(y && y !== this.__wall.postits[id].position.y)
         this.__wall.postits[id].position.y = y;
-      if(this.wallSocket && (x || y))
-        this.wallSocket.emit('update_postit_position', {id: id, position: {x: x, y: y}});
+      if(z && z !== this.__wall.postits[id].position.z)
+        this.__wall.postits[id].position.z = z;
+      if(this.wallSocket && (x || y || z))
+        this.wallSocket.emit('update_postit_position', {id: id, position: {x: x, y: y, z: z}});
     },
 
     getPostits: function() {
