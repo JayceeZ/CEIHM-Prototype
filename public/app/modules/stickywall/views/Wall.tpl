@@ -161,9 +161,7 @@
         {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
         {on touchmove {fn: "onPostitTouchMove", args: child, scope: this}/}
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}
-      {if !isSelected(child.index)}
-         style="overflow: hidden; width: ${postit.size.width}px; height: ${postit.size.height}px;"
-      {/if}>
+         style="overflow: auto; width: ${postit.size.width}px; height: ${postit.size.height}px;">
       {if postit.file }
         <img src="${postit.file}" alt="${postit.file}" />
       {else/}
