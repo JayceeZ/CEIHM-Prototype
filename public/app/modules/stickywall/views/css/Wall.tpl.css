@@ -46,6 +46,10 @@
             border: 3px solid rgba(1, 1, 1, 0);
     	}
 
+        div.resizable {
+            resize: both;
+        }
+
 		div.draggable.selected {
 			border: 3px solid black;
 		}

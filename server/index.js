@@ -259,6 +259,37 @@ ioServer.on('connection', function (socket) {
     }
   });
 
+  socket.on('update_postit_size', function (postitUpdate) {
+    // get the id of the wall of the client
+    var wallId = _.values(socket.rooms)[1];
+
+    if(wallId) {
+      // update post-it in the wall of client
+      Wall.findOne({_id: wallId}, function(err, result) {
+        if(result && !result.isCopy) {
+          var wall = result;
+          _.forEach(wall.postits, function(postit, id) {
+            if (id === postitUpdate.id) {
+              postit.size.width = postitUpdate.size.width;
+              postit.size.height = postitUpdate.size.height;
+              postitUpdate.postit = postit;
+            }
+          }, this);
+          Wall.update({_id: wall.id}, { $set: { postits: wall.postits }}, function(err) {
+            if (err)
+              postitUpdate.status = 'ERROR: Wall not saved';
+            else {
+              postitUpdate.status = 'SUCCESS: Wall saved successfully';
+              socket.to(wallId).emit('postit_updated', postitUpdate);
+            }
+          }, this);
+        }
+      });
+    } else {
+      socket.emit('action_error', {message: 'No wall registered'});
+    }
+  });
+
   socket.on('new_postit', function (postitAdded) {
     // get the id of the wall of the client
     var wallId = _.values(socket.rooms)[1];

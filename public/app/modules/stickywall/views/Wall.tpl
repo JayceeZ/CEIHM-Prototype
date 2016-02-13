@@ -155,7 +155,7 @@
       <div class="up" {on click {fn: "onPostitUpClick", args: child, scope: this}/}></div>
       <div class="down" {on click {fn: "onPostitDownClick", args: child, scope: this}/}></div>
     </div>
-    <div id="postit-${child.index}" class="draggable ${selected}" 
+    <div id="postit-${child.index}" class="resizable draggable ${selected}" 
         {on mousedown {fn: "onPostitMouseDown", args: child, scope: this}/}
         {on mouseup {fn: "onPostitMouseUp", args: child, scope: this}/}
         {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}

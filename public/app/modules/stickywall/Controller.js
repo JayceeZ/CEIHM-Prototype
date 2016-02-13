@@ -83,7 +83,7 @@ Aria.classDefinition({
       }
     },
 
-    updatePostit: function(id, name, content, file, x, y, z) {
+    updatePostit: function(id, name, content, file, x, y, z, w, h) {
       if(!id && id !== 0)
         return;
       if(name && name !== this.__wall.postits[id].name)
@@ -92,6 +92,7 @@ Aria.classDefinition({
         this.__wall.postits[id].content = content;
         this.wallSocket.emit('update_postit_content', {id: id, content: content});
       }
+
       if(x && x !== this.__wall.postits[id].position.x)
         this.__wall.postits[id].position.x = x;
       if(y && y !== this.__wall.postits[id].position.y)
@@ -100,7 +101,17 @@ Aria.classDefinition({
         this.__wall.postits[id].position.z = z;
       if(this.wallSocket && (x || y || z))
         this.wallSocket.emit('update_postit_position', {id: id, position: {x: x, y: y, z: z}});
-    },
+
+      if(!this.__wall.postits[id].size)
+        this.__wall.postits[id].size = {x: undefined, y: undefined};
+      if(w && w !== this.__wall.postits[id].size.width)
+        this.__wall.postits[id].size.width = w;
+      if(h && h !== this.__wall.postits[id].size.height)
+        this.__wall.postits[id].size.height = h;
+      if(this.wallSocket && (w || h)) {
+        this.wallSocket.emit('update_postit_size', {id: id, size: {width: w, height: h}});
+      }
+     },
 
     getPostits: function() {
       return _.clone(this.__wall.postits, true);
@@ -157,7 +168,7 @@ Aria.classDefinition({
     },
 
     __onPostitCreated : function(data) {
-      this.$logDebug('New Postit ('+data+')');
+      this.$logDebug('New Postit '+data.id);
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.postit.created',
         postit: data
@@ -165,7 +176,7 @@ Aria.classDefinition({
     },
 
     __onPostitRemoved : function(data) {
-      this.$logDebug('Postit ('+data+') removed');
+      this.$logDebug('Postit '+data.id+' removed');
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.postit.removed',
         id: data.id
