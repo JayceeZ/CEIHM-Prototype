@@ -2,7 +2,11 @@ var mongoose = require('mongoose');
 
 var wallSchema = new mongoose.Schema({
   name: String,
-  postits: []
+  postits: [],
+  isCopy: Boolean,
+  originalWallId: String,
+  version: Number,
+  date: Date
 });
 
 var postitSchema = new mongoose.Schema({

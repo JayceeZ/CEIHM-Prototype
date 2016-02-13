@@ -89,6 +89,16 @@ app.get('/api/wall/:id', function (req, res) {
   });
 });
 
+app.get('/api/wall/:id/markups', function (req, res) {
+  Wall.find({isCopy: true, originalWallId: req.params.id}, function(err, results) {
+    if(results) {
+      res.status(200).json(results);
+    } else {
+      res.status(500).json({ error: 'Wall with id ['+req.params.id+'] can\'t be fetched' });
+    }
+  });
+});
+
 app.get('/api/newwall', function (req, res) {
   var newWall = new Wall({name: "New Wall", postits: []});
   newWall.save(function (err) {
@@ -99,9 +109,52 @@ app.get('/api/newwall', function (req, res) {
   }, this);
 });
 
-app.get('/api/walls/', function (req, res) {
+app.post('/api/wall/:id/markup', function (req, res) {
+  Wall.findOne({ _id: req.params.id }, function (err, wallToCopy) {
+    if (err)
+      res.status(400).json({ message: 'Request is malformed' });
+    else {
+      if(wallToCopy) {
+        // verify if an existing exact copy don't exist
+        Wall.findOne({
+          isCopy: true,
+          originalWallId: wallToCopy._id,
+          version: wallToCopy.__v
+        }, function(err, existingCopy) {
+          if(existingCopy) {
+            res.status(400).json({message: 'Wall already have an exact copy', copyId: existingCopy._id});
+            return;
+          }
+          var copy = new Wall({
+            name: wallToCopy.name,
+            postits: wallToCopy.postits,
+            version: wallToCopy.__v,
+            date: new Date(),
+            isCopy: true,
+            originalWallId: wallToCopy._id
+          });
+          copy.save(function(err, wall) {
+            if(err)
+              res.status(500).json({ message: 'An unexpected error occured: '+err });
+            else
+              res.status(200).json({message: 'Wall have been copied', copyId: wall._id});
+          });
+        });
+      } else {
+        res.status(404).json({message: 'Requested wall does not exist'});
+      }
+    }
+  }, this);
+});
+
+app.get('/api/walls', function (req, res) {
   Wall.find(function(err, results) {
-    res.status(200).json({walls: results});
+    var ret = [];
+    _.forEach(results, function(result) {
+      if(result.isCopy !== true)
+        ret.push(result);
+    });
+    res.status(200).json({walls: ret});
   });
 });
 
@@ -122,7 +175,7 @@ app.post('/api/wall/:id/postit', upload.single('file'), function (req, res, next
   Wall.findOne({ _id: id }, function(err, result) {
     if(err)
       res.status(400).json("An error occurred: " + err);
-    if(result) {
+    if(result && !result.isCopy) {
       result.postits.push(newPostit);
       ioServer.sockets.to(id).emit('postit_added', newPostit);
       result.save();
@@ -151,7 +204,7 @@ ioServer.on('connection', function (socket) {
     if(wallId) {
       // update post-it in the wall of client
       Wall.findOne({_id: wallId}, function(err, result) {
-        if(result) {
+        if(result && !result.isCopy) {
           var wall = result;
           _.forEach(wall.postits, function(postit, id) {
             if (id === postitUpdate.id) {
@@ -181,7 +234,7 @@ ioServer.on('connection', function (socket) {
     if(wallId) {
       // update post-it in the wall of client
       Wall.findOne({_id: wallId}, function(err, result) {
-        if(result) {
+        if(result && !result.isCopy) {
           var wall = result;
           _.forEach(wall.postits, function(postit, id) {
             if (id === postitUpdate.id) {
@@ -213,17 +266,20 @@ ioServer.on('connection', function (socket) {
     if(wallId) {
       // update post-it in the wall of client
       Wall.findOne({_id: wallId}, function(err, result) {
-        // add post-it in the wall
-        result.postits.push(postitAdded);
-        result.save(function(err) {
-          if (err)
-            postitAdded.status = 'ERROR: Wall not saved';
-          else {
-            postitAdded.status = 'SUCCESS: Wall saved successfully';
-            socket.emit('postit_added', postitAdded);
-            socket.to(wallId).emit('postit_added', postitAdded);
-          }
-        }, this);
+        if(result && !result.isCopy) {
+          // add post-it in the wall
+          result.postits.push(postitAdded);
+          // save the wall
+          result.save(function (err) {
+            if (err)
+              postitAdded.status = 'ERROR: Wall not saved';
+            else {
+              postitAdded.status = 'SUCCESS: Wall saved successfully';
+              socket.emit('postit_added', postitAdded);
+              socket.to(wallId).emit('postit_added', postitAdded);
+            }
+          });
+        }
       });
     } else {
       socket.emit('action_error', {message: 'No wall registered'});
@@ -237,17 +293,20 @@ ioServer.on('connection', function (socket) {
     if(wallId) {
       // update post-it in the wall of client
       Wall.findOne({_id: wallId}, function(err, result) {
-        // add post-it in the wall
-        _.pullAt(result.postits, [postitRemoved.id]);
-        Wall.update({_id: result.id}, { $set: { postits: result.postits }}, function(err) {
-          if (err)
-            postitRemoved.status = 'ERROR: Wall not saved';
-          else {
-            postitRemoved.status = 'SUCCESS: Wall saved successfully';
-            socket.emit('postit_removed', postitRemoved);
-            socket.to(wallId).emit('postit_removed', postitRemoved);
-          }
-        }, this);
+        if(result && !result.isCopy) {
+          // remove post-it from the wall
+          _.pullAt(result.postits, [postitRemoved.id]);
+          // save the wall
+          Wall.update({_id: result.id}, {$set: {postits: result.postits}}, function (err) {
+            if (err)
+              postitRemoved.status = 'ERROR: Wall not saved';
+            else {
+              postitRemoved.status = 'SUCCESS: Wall saved successfully';
+              socket.emit('postit_removed', postitRemoved);
+              socket.to(wallId).emit('postit_removed', postitRemoved);
+            }
+          }, this);
+        }
       });
     } else {
       socket.emit('action_error', {message: 'No wall registered'});

@@ -94,10 +94,10 @@ Aria.tplScriptDefinition({
     onPostitUpClick : function(evt, child) {
       evt.preventDefault(true);
       var postit = child.item;
-      if(postit.position.z || postit.position.z === 0)
-        if(postit.position.z < this.model.postits.length)
+      if(postit.position.z || postit.position.z === 0) {
+        if (postit.position.z < this.model.postits.length)
           postit.position.z++;
-      else
+      } else
         postit.position.z = 1;
       this._refreshPostit(child.index);
       this.saveWall(child.index);
