@@ -35,27 +35,11 @@ Aria.classDefinition({
     init: function(args, cb) {
       this.$logDebug("Init");
 
-      try {
-        this.storage = new aria.storage.LocalStorage();
-      } catch (ex) {
-        this.$logDebug('Local Storage Error: '+ ex.message);
-      }
-      if(this.storage) {
-        var storedWallId = this.storage.getItem(this.STORAGE_ID);
-        if(storedWallId) {
-          this._loadWall(storedWallId);
-        } else {
-          this.createWall();
-        }
-      } else {
-        window.reload();
-      }
-
       // Keep going
       this.$callback(cb);
     },
 
-    onChangeWall: function(id) {
+    loadWall: function(id) {
       this._loadWall(id);
     },
 
@@ -205,6 +189,15 @@ Aria.classDefinition({
 
     validateWall : function(wall) {
       return (wall && wall._id && wall.name && wall.postits);
+    },
+
+    onModuleEvent: function(event) {
+      if(event) {
+        this.$logDebug('Received event '+event.name);
+        if(event.name === "") {
+
+        }
+      }
     },
 
     __onSocketDisconnect: function() {

@@ -101,7 +101,7 @@ app.get('/api/newwall', function (req, res) {
 
 app.get('/api/walls/', function (req, res) {
   Wall.find(function(err, results) {
-    res.status(200).json(results);
+    res.status(200).json({walls: results});
   });
 });
 

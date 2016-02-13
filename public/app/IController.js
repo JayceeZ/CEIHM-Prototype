@@ -5,5 +5,7 @@ Aria.interfaceDefinition({
     "app.submodule.load" : "Raised when a submodule templates wants to be loaded",
     'app.module.stickywall.wall.loaded' : 'Raised when the stickywall controller have loaded a wall'
   },
-  $interface: {}
+  $interface: {
+    loadWall: function(id) {}
+  }
 });

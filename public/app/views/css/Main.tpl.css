@@ -7,9 +7,9 @@
         height: calc(100% - 50px);
       }
 
-    	.navbar {
-    		margin-bottom: 0;
-    	}
+			.navbar {
+				margin-bottom: 0;
+			}
     {/macro}
 
 {/CSSTemplate}

@@ -3,27 +3,45 @@ Aria.tplScriptDefinition({
   $dependencies: ['aria.utils.Json'],
 
   $constructor: function() {
-    this.dataReady = false;
+    this.model = {
+      moduleLoadedId: ""
+    };
   },
 
   $prototype: {
     $dataReady : function() {
-      this.dataReady = true;
     },
 
-    loadSubModule : function(templateRef, controllerRef) {
+    loadSubModule : function(templateRef, controllerRef, controllerParent) {
       Aria.loadTemplate({
         classpath: templateRef,
         div: "submodule",
         moduleCtrl: {
           classpath: controllerRef
+        },
+        data: {
+          parentData: controllerParent._data,
+          parentCtrl: controllerParent
         }
       });
     },
 
+    loadModule: function(evt, id) {
+      this.$logDebug('Requested module '+ id);
+    },
+
+    isActive: function(moduleid) {
+      return moduleid === this.model.moduleLoadedId;
+    },
+
+    __setLoadedId : function(id) {
+      this.$json.setValue(this.model, "moduleLoadedId", id);
+    },
+
     onModuleEvent: function(evt) {
       if (evt.name === "app.submodule.load") {
-        this.loadSubModule(evt.view, evt.ctrl);
+        this.__setLoadedId(evt.id);
+        this.loadSubModule(evt.view, evt.ctrl, evt.parentCtrl);
       }
     }
   }

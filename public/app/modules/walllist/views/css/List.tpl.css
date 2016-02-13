@@ -1,0 +1,11 @@
+{CSSTemplate {
+    $classpath : "app.modules.walllist.views.css.List"
+}}
+
+    {macro main()}
+    	.walllist {
+    		margin-top: 20px;
+    	}
+    {/macro}
+
+{/CSSTemplate}
