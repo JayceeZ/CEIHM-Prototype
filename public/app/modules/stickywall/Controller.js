@@ -15,7 +15,7 @@ Aria.classDefinition({
     // Wall
     this.wallSocket = null;
     this.storage = null;
-    this.__wall = {name: "New wall", date: new Date(), postits: []};
+    this.__wall = {name: "Loading ...", date: new Date(), postits: []};
     this.originalWall = null;
     this._wallMarks = [];
   },

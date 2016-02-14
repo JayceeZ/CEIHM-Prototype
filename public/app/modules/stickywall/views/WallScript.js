@@ -38,7 +38,6 @@ Aria.tplScriptDefinition({
     $dataReady: function () {
       this.moduleCtrl.setData(this.data);
       this.moduleCtrl.loadWall(this.data.parentData.wall.id);
-      this.model.name = this.moduleCtrl.getWallName();
       this.__extractPostits();
     },
 
@@ -455,6 +454,9 @@ Aria.tplScriptDefinition({
 
     onModuleEvent: function (evt) {
       if (evt.name === 'app.module.stickywall.wall.loaded') {
+        var wallNameDOM = document.getElementById("wall-name");
+        this.$json.setValue(this.model, "name", this.moduleCtrl.getWallName());
+        wallNameDOM.innerHTML = this.model.name;
         this.__extractPostits();
       }
       if (evt.name === 'app.module.stickywall.wall.postit.updated') {

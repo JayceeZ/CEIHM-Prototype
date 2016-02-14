@@ -218,7 +218,7 @@
         }/}
       </div>
     {else/}
-      <div class="wall-name">${this.model.name}</div>
+      <div id="wall-name" class="wall-name">${this.model.name}</div>
       <div class="wall-history" {on click {fn: "onWallHistory", scope: this}/} {on touchend {fn: "onWallHistory", scope: this}/}></div>
     {/if}
   {/macro}
