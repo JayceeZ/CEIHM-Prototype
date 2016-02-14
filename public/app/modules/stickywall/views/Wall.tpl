@@ -175,7 +175,7 @@
          style="overflow: hidden; 
         {if postit.size}width: ${postit.size.width}px; height: ${postit.size.height}px;{/if}">
       {if postit.file && postit.file.match(/\.(jpg|jpeg|png|gif)$/) }
-        <img src="${postit.file}" alt="${postit.file}" />
+        <img src="${postit.file}" style="max-width: 100%;" alt="${postit.file}" />
       {else/}
         <div class="name">
           ${postit.name}
