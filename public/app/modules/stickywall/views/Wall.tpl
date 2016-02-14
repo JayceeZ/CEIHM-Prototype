@@ -45,12 +45,12 @@
   {macro floatingActions()}
     {if model.hideActions === false}
       <div class="floatings create-postit" {on click {fn: "onCreatePostit", scope: this}/} {on tap {fn: "onCreatePostit", scope: this}/}></div>
-      <div class="floatings zoom">
-        <div class="zoom-value">${model.wallScale.toFixed(2)}</div>
-        <div class="zoom-in" {on click {fn: "onZoomIn", scope: this}/} {on tap {fn: "onZoomIn", scope: this}/}></div>
-        <div class="zoom-out" {on click {fn: "onZoomOut", scope: this}/} {on tap {fn: "onZoomOut", scope: this}/}></div>
-      </div>
     {/if}
+    <div class="floatings zoom">
+      <div class="zoom-value">${model.wallScale.toFixed(2)}</div>
+      <div class="zoom-in" {on click {fn: "onZoomIn", scope: this}/} {on tap {fn: "onZoomIn", scope: this}/}></div>
+      <div class="zoom-out" {on click {fn: "onZoomOut", scope: this}/} {on tap {fn: "onZoomOut", scope: this}/}></div>
+    </div>
   {/macro}
 
 	{macro buildWall()}

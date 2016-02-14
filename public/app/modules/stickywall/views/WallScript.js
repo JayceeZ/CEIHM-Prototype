@@ -470,6 +470,7 @@ Aria.tplScriptDefinition({
     },
 
     __extractPostits: function () {
+      this.$json.setValue(this.model, "wallScale", 1.0);
       this.$json.setValue(this.model, "postits", this.moduleCtrl.getPostits());
     }
   }

@@ -39,7 +39,7 @@
 
   {macro mark(child)}
   	{var mark = child.item /}
-  	<div {on click {fn: "onMarkupSelect", args: child, scope: this}/}>
+  	<div {on click {fn: "onMarkupSelect", args: child, scope: this}/} {on touchend {fn: "onMarkupSelect", args: child, scope: this}/}>
 	    {@aria:Tooltip {
 		    id:"tooltipDate" + child.index,
 		    macro: {
