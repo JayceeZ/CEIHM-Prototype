@@ -164,15 +164,16 @@
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}
          style="overflow: hidden; 
         {if postit.size}width: ${postit.size.width}px; height: ${postit.size.height}px;{/if}">
-      {if postit.file }
+      {if postit.file.match(/\.(jpg|jpeg|png|gif)$/) }
         <img src="${postit.file}" alt="${postit.file}" />
       {else/}
-      <div class="name">
-        ${postit.name}
-      </div>
-      <div class="content">
-        ${postit.content}
-      </div>
+        <div class="name">
+          ${postit.name}
+        </div>
+        <div class="content">
+          ${postit.content}
+          <a href="${postit.file}">Fichier joint "${postit.file}"</a>
+        </div>
       {/if}
     </div>
   {/macro}
