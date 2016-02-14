@@ -7,6 +7,7 @@ Aria.interfaceDefinition({
   },
   $interface: {
     loadWall: function(id) {},
-    loadModule: function(id) {}
+    loadModule: function(id) {},
+    newWall: function() {}
   }
 });

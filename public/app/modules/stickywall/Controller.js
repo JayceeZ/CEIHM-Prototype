@@ -41,26 +41,6 @@ Aria.classDefinition({
       this._loadWall(id);
     },
 
-    createWall: function() {
-      aria.core.IO.asyncRequest({
-        url: "/api/newwall",
-        method: "GET",
-        expectedResponseType: 'json',
-        callback: {
-          fn: this._onWallCreated,
-          scope: this
-        }
-      });
-    },
-
-    _onWallCreated : function(response) {
-      if(!response.responseJSON) {
-        this.$logDebug('Failure creating wall');
-      }
-      this.__wall = response.responseJSON.wall;
-      this._loadWall(this.__wall._id);
-    },
-
     addPostit: function(newPostit) {
       try {
         aria.core.JsonValidator.normalize({
@@ -178,6 +158,7 @@ Aria.classDefinition({
 
     __onPostitRemoved : function(data) {
       this.$logDebug('Postit '+data.id+' removed');
+      //_.pullAt(this.__wall.postits, data.id);
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.postit.removed',
         id: data.id
@@ -193,7 +174,7 @@ Aria.classDefinition({
         });
       } else {
         this.$logDebug('Failure loading wall');
-        this.createWall();
+        this.parentCtrl.newWall();
       }
     },
 

@@ -76,6 +76,31 @@ Aria.classDefinition({
       });
     },
 
+    newWall: function() {
+      this.$logDebug('Creating a wall ');
+      this.__createWall();
+    },
+
+    __createWall: function() {
+      aria.core.IO.asyncRequest({
+        url: "/api/newwall",
+        method: "GET",
+        expectedResponseType: 'json',
+        callback: {
+          fn: this._onWallCreated,
+          scope: this
+        }
+      });
+    },
+
+    _onWallCreated : function(response) {
+      if(!response.responseJSON) {
+        this.$logDebug('Failure creating wall');
+      }
+      var id = response.responseJSON.wall._id;
+      this.loadWall(id);
+    },
+
     loadWall: function(id) {
       this.$logDebug('Loading wall '+id);
       this._data.wall.id = id;

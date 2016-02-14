@@ -51,6 +51,9 @@ Aria.classDefinition({
 
     _onWallsListLoaded: function(response) {
       var data = response.responseJSON;
+      if(!data.walls || !data.walls.length) {
+        this._data.parentCtrl.newWall();
+      }
       if(data) {
         this.$raiseEvent({
           name: "app.module.walllist.loaded",
