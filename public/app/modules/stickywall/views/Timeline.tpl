@@ -38,8 +38,26 @@
   {/macro}
 
   {macro mark(child)}
-    {var mark = child.item /}
-    ${mark.date.toLocaleString()}
+  	{var mark = child.item /}
+  	<div {on click {fn: "onMarkupSelect", args: child, scope: this}/}>
+	    {@aria:Tooltip {
+		    id:"tooltipDate" + child.index,
+		    macro: {
+		    	name: "tooltipDate",
+		    	args: [mark.date]
+		    }
+			}/}
+		  {@aria:Div {
+		  	sclass: "mark",
+		  	width: 15,
+				tooltipId: "tooltipDate"+child.index
+			}}
+			{/@aria:Div}
+		</div>
+  {/macro}
+
+  {macro tooltipDate(date)}
+  	${date.toLocaleString()}
   {/macro}
 
 {/Template}

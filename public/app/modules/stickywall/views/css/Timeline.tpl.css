@@ -17,8 +17,6 @@ div.timeline div.mark {
   overflow: visible;
   width: 15px;
   height: 32px;
-  font-size: 10px;
-  padding-left: 18px;
   background-image: url('images/mark.png');
   background-size: 15px 32px;
   background-repeat: no-repeat;

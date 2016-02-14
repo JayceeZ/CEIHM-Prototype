@@ -33,6 +33,12 @@ Aria.tplScriptDefinition({
       };
     },
 
+    onMarkupSelect : function(evt, child) {
+      this.$logDebug('Temporary wall load requested');
+      var markup = child.item;
+      this.moduleCtrl.loadTempWall(markup._id);
+    },
+
     setMarkups: function(markups) {
       this.$json.setValue(this.model, "wallMarks", markups);
     },

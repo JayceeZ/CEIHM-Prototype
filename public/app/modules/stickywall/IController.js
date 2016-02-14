@@ -10,6 +10,8 @@ Aria.interfaceDefinition({
   },
   $interface: {
     loadWall: function(id) {},
+    loadTempWall: function(id) {},
+    unloadTempWall: function() {},
     loadMarks: function() {},
     createMark: function() {},
     getWallDate: function() {},

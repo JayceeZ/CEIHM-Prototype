@@ -16,6 +16,7 @@ Aria.classDefinition({
     this.wallSocket = null;
     this.storage = null;
     this.__wall = {name: "New wall", date: new Date(), postits: []};
+    this.originalWall = null;
     this._wallMarks = [];
   },
 
@@ -40,6 +41,20 @@ Aria.classDefinition({
 
     loadWall: function(id) {
       this._loadWall(id);
+    },
+
+    loadTempWall: function(id) {
+      this.$logDebug('Loading temp wall '+id);
+      if(this.originalWall === null)
+        this.originalWall = this.__wall._id;
+      this._loadWall(id);
+    },
+
+    unloadTempWall: function() {
+      this.$logDebug('Reloading original wall '+this.originalWall);
+      if(this.originalWall !== null)
+        this._loadWall(this.originalWall);
+      this.originalWall = null;
     },
 
     createMark: function() {

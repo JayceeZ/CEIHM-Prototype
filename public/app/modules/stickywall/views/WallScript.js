@@ -448,6 +448,8 @@ Aria.tplScriptDefinition({
       evt.preventDefault(true);
       this.$logDebug("Display history toggle");
       this.$json.setValue(this.model, "showHistory", !this.model.showHistory);
+      if(!this.model.showHistory)
+        this.moduleCtrl.unloadTempWall();
       this.setActionsVisible(true);
     },
 
