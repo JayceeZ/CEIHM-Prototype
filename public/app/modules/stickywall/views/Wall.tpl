@@ -152,7 +152,7 @@
     {var selected = isSelected(child.index) ? "selected" : "" /}
 
     <div class="postit-actions ${selected}">
-      {if postit.position.z}<div class="z-level">Plan ${postit.position.z}</div>{/if}
+      {if postit.position.z !== undefined}<div class="z-level">Plan ${postit.position.z}</div>{/if}
       <div class="up" {on click {fn: "onPostitUpClick", args: child, scope: this}/}></div>
       <div class="down" {on click {fn: "onPostitDownClick", args: child, scope: this}/}></div>
     </div>

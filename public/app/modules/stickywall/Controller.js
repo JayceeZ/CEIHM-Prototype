@@ -168,7 +168,8 @@ Aria.classDefinition({
     },
 
     __onPostitCreated : function(data) {
-      this.$logDebug('New Postit '+data.id);
+      this.__wall.postits.push(data);
+      this.$logDebug('New Postit '+this.__wall.postits.length);
       this.$raiseEvent({
         name: 'app.module.stickywall.wall.postit.created',
         postit: data
