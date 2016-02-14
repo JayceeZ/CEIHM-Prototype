@@ -11,6 +11,7 @@ Aria.interfaceDefinition({
   $interface: {
     loadWall: function(id) {},
     loadMarks: function() {},
+    getWallDate: function() {},
     getWallName: function() {},
     getPostits: function() {},
     updatePostit: function(id, name, content, file, x, y) {},

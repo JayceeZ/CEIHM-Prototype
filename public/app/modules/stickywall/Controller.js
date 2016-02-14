@@ -15,7 +15,7 @@ Aria.classDefinition({
     // Wall
     this.wallSocket = null;
     this.storage = null;
-    this.__wall = {name: "New wall", postits: []};
+    this.__wall = {name: "New wall", date: new Date(), postits: []};
     this._wallMarks = [];
   },
 
@@ -201,6 +201,10 @@ Aria.classDefinition({
 
     validateWall : function(wall) {
       return (wall && wall._id && wall.name && wall.postits);
+    },
+
+    getWallDate : function() {
+      return this.__wall.date;
     },
 
     onModuleEvent: function(event) {

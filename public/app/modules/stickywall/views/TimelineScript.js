@@ -14,14 +14,15 @@ Aria.tplScriptDefinition({
 
   $prototype: {
     $dataReady: function () {
+      this.model.wallCreation = this.moduleCtrl.getWallDate();
       this.moduleCtrl.loadMarks();
     },
 
     getMarkAttributes: function(child) {
       var mark = child.item;
-      var startTimeline = this.model.wall.date.getTime();
+      var startTimeline = new Date(this.model.wallCreation).getTime();
       var totalTimeline = new Date() - startTimeline;
-      var markTime = mark.date.getTime();
+      var markTime = new Date(mark.date).getTime();
       var posX =  (markTime - startTimeline) / totalTimeline;
 
       var wall = document.getElementsByClassName("wall")[0];

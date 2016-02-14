@@ -5,7 +5,20 @@
 }}
 
   {macro main()}
-    {repeater {
+  	{section {
+  		macro: "marks",
+      bindRefreshTo: [
+        {
+          to: "wallMarks",
+          inside: model,
+          recursive: false
+        }
+      ]
+  	}/}
+  {/macro}
+
+  {macro marks()}
+		{repeater {
       loopType: "array",
       content: model.wallMarks,
       type: "div",
