@@ -76,16 +76,22 @@ Aria.classDefinition({
       });
     },
 
-    newWall: function() {
+    newWall: function(name) {
       this.$logDebug('Creating a wall ');
-      this.__createWall();
+      this.__createWall(name);
     },
 
-    __createWall: function() {
+    __createWall: function(name) {
+      this.$logDebug('Creating wall with name '+name);
+      var payload = {name: name};
       aria.core.IO.asyncRequest({
         url: "/api/newwall",
-        method: "GET",
+        method: "POST",
+        data: aria.utils.Json.convertToJsonString(payload),
         expectedResponseType: 'json',
+        headers : {
+          "Content-Type" : "application/json"
+        },
         callback: {
           fn: this._onWallCreated,
           scope: this

@@ -40,8 +40,7 @@ var Wall = mongoose.model('Wall', schemas.wall);
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.send('error', {
+    res.status(500).json({
       message: err.message,
       error: err
     });
@@ -99,9 +98,10 @@ app.get('/api/wall/:id/markups', function (req, res) {
   });
 });
 
-app.get('/api/newwall', function (req, res) {
+app.post('/api/newwall', function (req, res) {
+  var newName = req.body.name || "Mur anonyme";
   var newWall = new Wall({
-      name: "New Wall",
+      name: newName,
       date: new Date(),
       postits: []
     });

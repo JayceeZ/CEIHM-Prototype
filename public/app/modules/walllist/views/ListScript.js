@@ -4,10 +4,12 @@ Aria.tplScriptDefinition({
 
   $constructor: function() {
     this.model = {
+      name: "",
       walls: [{
-        name: "No walls",
+        name: "Pas de murs",
         postits: []
-      }]
+      }],
+      createDialog: false
     };
   },
 
@@ -28,6 +30,17 @@ Aria.tplScriptDefinition({
       this.moduleCtrl.loadWall(args[0]);
     },
 
+    onValidateName: function() {
+      this.$json.setValue(this.model, "createDialog", false);
+      this.moduleCtrl.createNewWall(this.model.name);
+      this.$json.setValue(this.model, "name", "");
+    },
+
+    askForName: function() {
+      // popup for name
+      this.$json.setValue(this.model, "createDialog", true);
+    },
+
     __setWalls: function(walls) {
       this.$json.setValue(this.model, "walls", walls);
     },
@@ -35,6 +48,8 @@ Aria.tplScriptDefinition({
     onModuleEvent: function(evt) {
       if (evt.name === 'app.module.walllist.loaded') {
         this.__setWalls(evt.walls);
+      } else if (evt.name === 'app.module.walllist.nowalls') {
+        this.askForName();
       }
     }
   }

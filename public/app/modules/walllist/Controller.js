@@ -52,7 +52,9 @@ Aria.classDefinition({
     _onWallsListLoaded: function(response) {
       var data = response.responseJSON;
       if(!data.walls || !data.walls.length) {
-        this._data.parentCtrl.newWall();
+        this.$raiseEvent({
+          name: "app.module.walllist.nowalls"
+        });
       }
       if(data) {
         this.$raiseEvent({
@@ -60,6 +62,10 @@ Aria.classDefinition({
           walls: data.walls
         });
       }
+    },
+
+    createNewWall : function(name) {
+      this._data.parentCtrl.newWall(name);
     },
 
     onModuleEvent: function (event) {

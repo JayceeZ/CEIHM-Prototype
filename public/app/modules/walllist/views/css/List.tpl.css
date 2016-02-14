@@ -5,6 +5,8 @@
     {macro main()}
     	.walllist {
     		margin-top: 20px;
+            overflow: auto;
+            height: 100%;
     	}
 
     	.expand {

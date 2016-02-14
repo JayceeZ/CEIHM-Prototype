@@ -125,6 +125,7 @@
       modal : true,
       visible : false,
       movable : true,
+      width: 500,
       macro : "postitCreationDialog",
       bind : {
         "visible" : {
@@ -137,9 +138,9 @@
 
   {macro postitCreationDialog()}
     {@aria:Textarea {
-      label : "Name",
+      label : "Nom",
       labelPos : "left",
-      helptext : "The title of the post-it",
+      helptext : "Le nom du post-it",
       block : true,
       labelWidth : 100,
       bind : {
@@ -150,9 +151,9 @@
       }
     }/}
     {@aria:Textarea {
-      label : "Content",
+      label : "Contenu",
       labelPos : "left",
-      helptext : "The content of the post-it",
+      helptext : "Le texte contenu dans le post-it",
       block : true,
       labelWidth : 100,
       bind : {
@@ -168,9 +169,9 @@
       onclick: onImportFile
     }/}
     <form style="display: none;" enctype="multipart/form-data" name="formSubmit" id="formSubmit">
-      <input type="file" id="fileUpload" name="file" {on change onFileChosen /} />
+          <input type="file" id="fileUpload" name="file" {on change onFileChosen /} />
     </form>
-    <div class="btn btn-default" {on click {fn: "onValidateCreatePostit", scope: this}/}>Create</div>
+    <div class="btn btn-default" {on click {fn: "onValidateCreatePostit", scope: this}/}>Valider</div>
   {/macro}
 
   {macro postit(child)}
