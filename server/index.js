@@ -163,11 +163,18 @@ app.post('/api/wall/:id/postit', upload.single('file'), function (req, res, next
   console.log("File uploaded to " + req.file.path);
 
   var id = req.params.id;
+  var size = { width: Number(req.body.width) || 100, height: Number(req.body.height) || 100};
+  console.log(size);
   var newPostit = {
     name: req.file.filename,
     position: {
       x: 200,
-      y: 200
+      y: 200,
+      z: 0
+    },
+    size: {
+      width: size.width,
+      height: size.height
     },
     file: "uploads/"+req.file.filename
   };

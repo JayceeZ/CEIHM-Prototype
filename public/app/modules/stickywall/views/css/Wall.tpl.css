@@ -79,6 +79,13 @@
             visibility: visible;
         }
 
+        div.postit-actions div.z-level {
+            display: inline-block;
+            font-size: 0.8em;
+            font-weight: bold;
+            height: 15px;
+        }
+
         div.postit-actions div.up, div.postit-actions div.down {
             display: inline-block;
             width: 15px;

@@ -152,6 +152,7 @@
     {var selected = isSelected(child.index) ? "selected" : "" /}
 
     <div class="postit-actions ${selected}">
+      {if postit.position.z}<div class="z-level">Plan ${postit.position.z}</div>{/if}
       <div class="up" {on click {fn: "onPostitUpClick", args: child, scope: this}/}></div>
       <div class="down" {on click {fn: "onPostitDownClick", args: child, scope: this}/}></div>
     </div>
@@ -161,7 +162,8 @@
         {on touchstart {fn: "onPostitTouchStart", args: child, scope: this}/}
         {on touchmove {fn: "onPostitTouchMove", args: child, scope: this}/}
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}
-         style="overflow: auto; width: ${postit.size.width}px; height: ${postit.size.height}px;">
+         style="overflow: hidden; 
+        {if postit.size}width: ${postit.size.width}px; height: ${postit.size.height}px;{/if}">
       {if postit.file }
         <img src="${postit.file}" alt="${postit.file}" />
       {else/}
