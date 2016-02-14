@@ -121,5 +121,16 @@ div.compass {
   left: 1em;
   bottom: 1em;
 }
+div.compass div.recenter {
+  display: inline-block;
+  background-image: url('images/recenter.png');
+  width: 31px;
+  height: 26px;
+  background-size: 31px 26px;
+  background-repeat: no-repeat;
+}
+div.compass div.coordinates {
+  display: inline-block;
+}
 {/macro}
 {/CSSTemplate}

@@ -76,8 +76,11 @@
 
   {macro compass()}
     <div class="compass">
-      x: ${wallOrig.x}<br />
-      y: ${wallOrig.y}
+      <div class="recenter" {on click {fn: "onRecenter", scope: this}/} {on tap {fn: "onRecenter", scope: this}/}></div>
+      <div class="coordinates">
+        x: ${wallOrig.x}<br />
+        y: ${wallOrig.y}
+      </div>
     </div>
   {/macro}
 

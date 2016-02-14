@@ -337,6 +337,14 @@ Aria.tplScriptDefinition({
       }
     },
 
+    onRecenter: function() {
+      this.$json.setValue(this.wallOrig, "x", 0);
+      this.$json.setValue(this.wallOrig, "y", 0);
+      for (var i = 0; i < this.model.postits.length; i++) {
+        this._refreshPostitPositionStyle(i);
+      }
+    },
+
     onCreatePostit: function (evt) {
       this.model.postitToEdit.position.x = this.wallOrig.x + window.innerWidth / 2;
       this.model.postitToEdit.position.y = this.wallOrig.y + window.innerHeight / 2;
