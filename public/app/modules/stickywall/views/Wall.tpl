@@ -26,7 +26,11 @@
 
   {macro floatingActions()}
     {if model.hideActions === false}
-      <div class="create-postit" {on click {fn: "onCreatePostit", scope: this}/}></div>
+      <div class="floatings create-postit" {on click {fn: "onCreatePostit", scope: this}/}></div>
+      <div class="floatings zoom">
+        <div class="zoom-out" {on click {fn: "onZoomOut", scope: this}/} {on touchend {fn: "onZoomOut", scope: this}/}></div>
+        <div class="zoom-in" {on click {fn: "onZoomIn", scope: this}/} {on touchend {fn: "onZoomIn", scope: this}/}></div>
+      </div>
     {/if}
   {/macro}
 
@@ -77,7 +81,7 @@
       content: model.postits,
       type: "div",
       attributes: {
-        classList: ["wall"],
+        classList: ["wall"]
       },
       childSections : {
         id: "postit",
@@ -164,15 +168,18 @@
         {on touchend {fn: "onPostitTouchEnd", args: child, scope: this}/}
          style="overflow: hidden; 
         {if postit.size}width: ${postit.size.width}px; height: ${postit.size.height}px;{/if}">
-      {if postit.file.match(/\.(jpg|jpeg|png|gif)$/) }
+      {if postit.file && postit.file.match(/\.(jpg|jpeg|png|gif)$/) }
         <img src="${postit.file}" alt="${postit.file}" />
       {else/}
         <div class="name">
           ${postit.name}
         </div>
         <div class="content">
-          ${postit.content}<br />
+          ${postit.content}
+        {if postit.file}
+          <br />
           <a href="${postit.file}">Fichier joint "${postit.file}"</a>
+        {/if}
         </div>
       {/if}
     </div>

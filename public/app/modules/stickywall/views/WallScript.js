@@ -24,6 +24,7 @@ Aria.tplScriptDefinition({
           height: 100
         }
       },
+      wallScale: 1.0,
       createDialog: false,
       hideActions: false
     };
@@ -59,6 +60,24 @@ Aria.tplScriptDefinition({
         classList: ["postit"],
         style: "left: " + posX + "px; top: " + posY + "px; z-index: " + posZ + ";"
       };
+    },
+
+    onZoomOut : function() {
+      var wallDOM = document.getElementsByClassName("wall")[0];
+      var newScale = this.model.wallScale;
+      if(newScale > 0.1)
+       newScale -= 0.1;
+      this.$json.setValue(this.model, "wallScale", newScale);
+      wallDOM.style = "transform: scale("+newScale+");";
+    },
+
+    onZoomIn : function() {
+      var wallDOM = document.getElementsByClassName("wall")[0];
+      var newScale = this.model.wallScale;
+      if(newScale < 1.0)
+        newScale += 0.1;
+      this.$json.setValue(this.model, "wallScale", newScale);
+      wallDOM.style = "transform: scale("+newScale+");";
     },
 
     onPostitMouseDown: function (evt, child) {

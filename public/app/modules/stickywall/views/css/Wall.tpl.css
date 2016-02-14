@@ -23,11 +23,33 @@
     		right: 1em;
     	}
 
-        div.create-postit {
+        div.floatings {
             position: absolute;
             right: 20px;
             z-index: 1000;
+        }
 
+        div.zoom {
+            bottom: 100px;
+        }
+
+        div.zoom-in {
+            background-image: url('images/minus.png');
+            background-size: 21px 5px;
+            background-position: 0px 15px;
+            background-repeat: no-repeat;
+            width: 21px;
+            height: 21px;
+        }
+
+        div.zoom-out {
+            background-image: url('images/plus.png');
+            background-size: 21px 21px;
+            width: 21px;
+            height: 21px;
+        }
+
+        div.create-postit {
             background-image: url('images/create_postit.png');
             background-size: 97px 97px;
             width: 97px;
