@@ -394,6 +394,12 @@ Aria.tplScriptDefinition({
       }
     },
 
+    onWallMark: function(evt) {
+      this.$logDebug("Wall mark requested");
+      evt.preventDefault(true);
+      this.moduleCtrl.createMark();
+    },
+
     __savePostit: function (id, postit) {
       var width = 0, height = 0;
       if (postit.size) {

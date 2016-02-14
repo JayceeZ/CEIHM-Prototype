@@ -126,6 +126,7 @@ app.post('/api/wall/:id/markup', function (req, res) {
           version: wallToCopy.__v
         }, function(err, existingCopy) {
           if(existingCopy) {
+            // lock useless wall copies
             res.status(400).json({message: 'Wall already have an exact copy', copyId: existingCopy._id});
             return;
           }

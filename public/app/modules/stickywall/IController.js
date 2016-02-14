@@ -11,6 +11,7 @@ Aria.interfaceDefinition({
   $interface: {
     loadWall: function(id) {},
     loadMarks: function() {},
+    createMark: function() {},
     getWallDate: function() {},
     getWallName: function() {},
     getPostits: function() {},

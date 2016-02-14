@@ -7,7 +7,8 @@
 	{macro main()}
     <div class="actions">
       {call createPostitDialog() /}
-      <div class="btn btn-danger" {on click {fn: "onDeletePostit", scope: this}/}>Delete Post-It</div>
+      <div class="btn btn-default" {on click {fn: "onWallMark", scope: this}/}><span class="glyphicon glyphicon-bookmark"></span>Créer un marqueur</div>
+      <div class="btn btn-danger" {on click {fn: "onDeletePostit", scope: this}/}>Supprimer un Post-It</div>
     </div>
     {section {
         id: "floatings",

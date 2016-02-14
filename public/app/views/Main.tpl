@@ -32,7 +32,7 @@
 		    </div>
 		    <div id="navbar" class="navbar-collapse collapse">
 	      <ul class="nav navbar-nav">
-	        <li class="${isActive("walllist") ? "active" : ""}"><a href="#" {on click {fn: "loadModule", scope: this, args: ["walllist"]} /}>Walls List</a></li>
+	        <li class="${isActive("walllist") ? "active" : ""}"><a href="#" {on click {fn: "loadModule", scope: this, args: ["walllist"]} /}>Liste des StickyWalls</a></li>
 	      </ul>
       </div>
     </nav>

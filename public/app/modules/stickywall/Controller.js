@@ -42,6 +42,18 @@ Aria.classDefinition({
       this._loadWall(id);
     },
 
+    createMark: function() {
+      aria.core.IO.asyncRequest({
+        url: "/api/wall/" + this.__wall._id+"/markup",
+        method: "post",
+        expectedResponseType: 'json',
+        callback: {
+          fn: this.loadMarks,
+          scope: this
+        }
+      });
+    },
+
     addPostit: function(newPostit) {
       try {
         aria.core.JsonValidator.normalize({
