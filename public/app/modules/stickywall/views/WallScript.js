@@ -41,8 +41,8 @@ Aria.tplScriptDefinition({
       this.__extractPostits();
     },
 
-    setActionsVisible: function (boolean) {
-      this.$json.setValue(this.model, "hideActions", !boolean);
+    setActionsVisible: function (bool) {
+      this.$json.setValue(this.model, "hideActions", !bool);
     },
 
     /**
@@ -285,7 +285,7 @@ Aria.tplScriptDefinition({
 
       if (this.wallMove) {
         // déplacer le wall
-        this.moveWall(evt.touches[0].clientX - this.wallMove.x, evt.touches[0].clientY - this.wallMove.y);
+        this.moveWall((evt.touches[0].clientX - this.wallMove.x)/this.model.wallScale, (evt.touches[0].clientY - this.wallMove.y)/this.model.wallScale);
         this.wallMove.x = evt.touches[0].clientX;
         this.wallMove.y = evt.touches[0].clientY;
       }
@@ -330,8 +330,8 @@ Aria.tplScriptDefinition({
     },
 
     moveWall: function (dx, dy) {
-      this.$json.setValue(this.wallOrig, "x", Math.round(this.wallOrig.x + dx/this.model.wallScale));
-      this.$json.setValue(this.wallOrig, "y", Math.round(this.wallOrig.y + dy/this.model.wallScale));
+      this.$json.setValue(this.wallOrig, "x", Math.round(this.wallOrig.x + dx));
+      this.$json.setValue(this.wallOrig, "y", Math.round(this.wallOrig.y + dy));
       for (var i = 0; i < this.model.postits.length; i++) {
         this._refreshPostitPositionStyle(i);
       }
