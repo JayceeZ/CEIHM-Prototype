@@ -5,10 +5,7 @@ Aria.tplScriptDefinition({
   $constructor: function() {
     this.model = {
       name: "",
-      walls: [{
-        name: "Pas de murs",
-        postits: []
-      }],
+      walls: [],
       createDialog: false
     };
   },
