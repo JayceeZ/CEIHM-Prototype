@@ -100,7 +100,11 @@ app.get('/api/wall/:id/markups', function (req, res) {
 });
 
 app.get('/api/newwall', function (req, res) {
-  var newWall = new Wall({name: "New Wall", postits: []});
+  var newWall = new Wall({
+      name: "New Wall",
+      date: new Date(),
+      postits: []
+    });
   newWall.save(function (err) {
     if (err)
       res.status(500).json({ message: 'Request is malformed' });

@@ -1,0 +1,27 @@
+{CSSTemplate {
+    $classpath: "app.modules.stickywall.views.css.Timeline"
+}}
+
+{macro main()}
+div.timeline {
+  height: 35px;
+  border-bottom: 3px solid black;
+}
+
+div.timeline.hidden {
+  display: none;
+}
+
+div.timeline div.mark {
+  position: absolute;
+  overflow: visible;
+  width: 15px;
+  height: 32px;
+  font-size: 10px;
+  padding-left: 18px;
+  background-image: url('images/mark.png');
+  background-size: 15px 32px;
+  background-repeat: no-repeat;
+}
+{/macro}
+{/CSSTemplate}

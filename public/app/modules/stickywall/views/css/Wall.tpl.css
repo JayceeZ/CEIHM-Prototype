@@ -132,5 +132,35 @@ div.compass div.recenter {
 div.compass div.coordinates {
   display: inline-block;
 }
+
+div.wall-history {
+  position: absolute;
+  right: 5px;
+  bottom: 0px;
+  background-image: url('images/blochistoriquecomplet.png');
+  width: 260px;
+  height: 53px;
+  background-size: 260px 53px;
+  background-repeat: no-repeat;
+}
+
+div.history-close {
+  position: absolute;
+  z-index: 1000;
+  right: 5px;
+  background-image: url('images/down_double_arrows.png');
+  width: 15px;
+  height: 15px;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+}
+
+div.bloc-history {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 60px;
+  background-color: white;
+}
 {/macro}
 {/CSSTemplate}

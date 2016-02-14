@@ -25,6 +25,7 @@ Aria.tplScriptDefinition({
         }
       },
       wallScale: 1.0,
+      showHistory: false,
       createDialog: false,
       hideActions: false
     };
@@ -42,7 +43,7 @@ Aria.tplScriptDefinition({
     },
 
     setActionsVisible: function (bool) {
-      this.$json.setValue(this.model, "hideActions", !bool);
+      this.$json.setValue(this.model, "hideActions", !bool || this.model.showHistory);
     },
 
     /**
@@ -435,6 +436,13 @@ Aria.tplScriptDefinition({
 
     onFileUploadError: function (res) {
       this.$logDebug('File upload error');
+    },
+
+    onWallHistory : function(evt) {
+      evt.preventDefault(true);
+      this.$logDebug("Display history toggle");
+      this.$json.setValue(this.model, "showHistory", !this.model.showHistory);
+      this.setActionsVisible(true);
     },
 
     onModuleEvent: function (evt) {

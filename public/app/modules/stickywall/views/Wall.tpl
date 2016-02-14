@@ -27,6 +27,18 @@
       }
     /}
 		{call buildWall() /}
+    {section {
+        id: "timeline",
+        macro: "timeline",
+        bindRefreshTo: [
+          {
+            to: "showHistory",
+            inside: model,
+            recursive: false
+          }
+        ]
+      }
+    /}
 	{/macro}
 
   {macro floatingActions()}
@@ -192,6 +204,20 @@
         </div>
       {/if}
     </div>
+  {/macro}
+
+  {macro timeline()}
+    {if this.model.showHistory}
+      <div class="bloc-history">
+        <div class="history-close" {on click {fn: "onWallHistory", scope: this}/} {on touchend {fn: "onWallHistory", scope: this}/}></div>
+        {@aria:Template {
+          defaultTemplate : "app.modules.stickywall.views.Timeline",
+          block : true
+        }/}
+      </div>
+    {else/}
+      <div class="wall-history" {on click {fn: "onWallHistory", scope: this}/} {on touchend {fn: "onWallHistory", scope: this}/}></div>
+    {/if}
   {/macro}
 
 {/Template}
