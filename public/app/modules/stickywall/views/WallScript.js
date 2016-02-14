@@ -291,11 +291,11 @@ Aria.tplScriptDefinition({
 
     onWallTouchEnd: function (evt) {
       this.$logDebug("TouchEnd Wall");
+      this.setActionsVisible(true);
       if (!this.noWallTouch)
         return;
 
       this.wallMove = false;
-      this.setActionsVisible(true);
     },
 
     _refreshPostitPositionStyle: function (id) {

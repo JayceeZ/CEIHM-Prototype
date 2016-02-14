@@ -1,136 +1,123 @@
 {CSSTemplate {
-    $classpath : "app.modules.stickywall.views.css.Wall"
+    $classpath: "app.modules.stickywall.views.css.Wall"
 }}
 
-    {macro main()}
-    	div.wall {
-    		width: 100%;
-    		height: 100%;
-    	}
-
-    	div.postit {
-    		position: absolute;
-			box-shadow: 1px 2px 2px 2px rgba(0, 0, 0, 0.7);
-			background-color: #FFFFFF;
-    		cursor: pointer;
-    	}
-
-    	div.actions {
-    		position: absolute;
-			z-index: 1000;
-    		top: 0.5em;
-    		right: 1em;
-    	}
-
-        div.floatings {
-            position: absolute;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        div.zoom {
-            bottom: 100px;
-        }
-
-        div.zoom-in {
-            background-image: url('images/minus.png');
-            background-size: 21px 5px;
-            background-position: 0px 15px;
-            background-repeat: no-repeat;
-            width: 21px;
-            height: 21px;
-        }
-
-        div.zoom-out {
-            background-image: url('images/plus.png');
-            background-size: 21px 21px;
-            width: 21px;
-            height: 21px;
-        }
-
-        div.create-postit {
-            background-image: url('images/create_postit.png');
-            background-size: 97px 97px;
-            width: 97px;
-            height: 97px;
-        }
-
-    	div.selected {
-    		overflow: hidden;
-    	}
-
-    	div.draggable {
-    		padding: 1em;
-    		width: 100%;
-    		height: 100%;
-			cursor: move;
-            border: 3px solid rgba(1, 1, 1, 0);
-    	}
-
-        div.selected.resizable {
-            resize: both;
-        }
-
-		div.draggable.selected {
-			border: 3px solid black;
-		}
-
-    	div.postit div.name {
-    		font-weight: bold;
-			font-size: 2em;
-    		margin-bottom: 0.2em;
-    	}
-
-    	div.postit div.content {
-    		margin: 2em;
-    	}
-
-        div.postit-actions {
-            position: absolute;
-            visibility: hidden;
-            right: 0;
-            top: 0;
-            z-index: 1000000;
-            padding: 5px;
-            background-color: rgba(1.0,1.0,1.0,0.2);
-            cursor: pointer;
-        }
-
-        div.postit:hover div.postit-actions {
-            visibility: visible;
-        }
-
-        div.postit-actions div.z-level {
-            display: inline-block;
-            font-size: 0.8em;
-            font-weight: bold;
-            height: 15px;
-        }
-
-        div.postit-actions div.up, div.postit-actions div.down {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            background-size: 15px 15px;
-            background-repeat: no-repeat;
-        }
-
-        div.postit-actions div.up:hover, div.postit-actions div.down:hover {
-            background-color: rgba( 0.5, 0.5, 0.5, 1);
-        }
-
-        div.postit-actions div.up {
-            background-image: url('images/up_double_arrows.png');        
-        }
-        div.postit-actions div.down {
-            background-image: url('images/down_double_arrows.png');
-        }
-
-		div.compass {
-			position: absolute;
-			left: 1em;
-			bottom: 1em;
-		}
-    {/macro}
-
+{macro main()}
+div.wall {
+  width: 100%;
+  height: 100%;
+}
+div.postit {
+  position: absolute;
+  box-shadow: 1px 2px 2px 2px rgba(0, 0, 0, 0.7);
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+div.actions {
+  position: absolute;
+  z-index: 1000;
+  top: 0.5em;
+  right: 5em;
+}
+div.floatings {
+  position: absolute;
+  right: 20px;
+  z-index: 1000;
+}
+div.zoom {
+  bottom: 100px;
+}
+div.zoom div {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;
+}
+div.zoom-in {
+  background-image: url('images/minus.png');
+  background-size: 21px 5px;
+  background-position: 0px 15px;
+  background-repeat: no-repeat;
+  width: 21px;
+  height: 21px;
+}
+div.zoom-out {
+  background-image: url('images/plus.png');
+  background-size: 21px 21px;
+  width: 21px;
+  height: 21px;
+}
+div.create-postit {
+  background-image: url('images/create_postit.png');
+  background-size: 97px 97px;
+  width: 97px;
+  height: 97px;
+}
+div.selected {
+  overflow: hidden;
+}
+div.draggable {
+  padding: 1em;
+  width: 100%;
+  height: 100%;
+  cursor: move;
+  border: 3px solid rgba(1, 1, 1, 0);
+}
+div.selected.resizable {
+  resize: both;
+}
+div.draggable.selected {
+  border: 3px solid black;
+}
+div.postit div.name {
+  font-weight: bold;
+  font-size: 2em;
+  margin-bottom: 0.2em;
+}
+div.postit div.content {
+  margin: 2em;
+}
+div.postit-actions {
+  position: absolute;
+  visibility: hidden;
+  right: 0;
+  top: 0;
+  z-index: 1000000;
+  padding: 5px;
+  background-color: rgba(1.0, 1.0, 1.0, 0.2);
+  cursor: pointer;
+}
+div.postit:hover div.postit-actions {
+  visibility: visible;
+}
+div.postit-actions div.z-level {
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: bold;
+  height: 15px;
+}
+div.postit-actions div.up, div.postit-actions div.down {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+}
+div.postit-actions div.up:hover, div.postit-actions div.down:hover {
+  background-color: rgba(0.5, 0.5, 0.5, 1);
+}
+div.postit-actions div.up {
+  background-image: url('images/up_double_arrows.png');
+}
+div.postit-actions div.down {
+  background-image: url('images/down_double_arrows.png');
+}
+div.compass {
+  position: absolute;
+  left: 1em;
+  bottom: 1em;
+}
+{/macro}
 {/CSSTemplate}
