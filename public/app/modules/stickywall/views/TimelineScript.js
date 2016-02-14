@@ -7,29 +7,14 @@ Aria.tplScriptDefinition({
 
   $constructor: function () {
     this.model = {
-      wall: {
-        date: new Date("02-08-2016")
-      },
-      wallMarks: [
-        {
-          id: "trucmuche",
-          date: new Date("02-10-2016")
-        },
-        {
-          id: "autrechose",
-          date: new Date("02-12-2016")
-        },
-        {
-          id: "sachetdethe",
-          date: new Date(new Date - new Date(40))
-        }
-      ]
+      wallCreation: new Date(),
+      wallMarks: []
     };
   },
 
   $prototype: {
     $dataReady: function () {
-      //this.moduleCtrl.loadMarks();
+      this.moduleCtrl.loadMarks();
     },
 
     getMarkAttributes: function(child) {
@@ -45,6 +30,17 @@ Aria.tplScriptDefinition({
         classList: ["mark"],
         style: "left: "+ (posX * wallWidth) +"px;"
       };
+    },
+
+    setMarkups: function(markups) {
+      this.$json.setValue(this.model, "wallMarks", markups);
+    },
+
+    onModuleEvent: function (evt) {
+      this.$logDebug('Received event '+evt.name);
+      if (evt.name === 'app.module.stickywall.wall.marks.updated') {
+        this.setMarkups(evt.marks);
+      }
     }
   }
 });

@@ -16,6 +16,7 @@ Aria.classDefinition({
     this.wallSocket = null;
     this.storage = null;
     this.__wall = {name: "New wall", postits: []};
+    this._wallMarks = [];
   },
 
   $destructor: function() {
@@ -92,6 +93,26 @@ Aria.classDefinition({
         this.wallSocket.emit('update_postit_size', {id: id, size: {width: w, height: h}});
       }
      },
+
+    loadMarks: function() {
+      aria.core.IO.asyncRequest({
+        url: "/api/wall/" + this.__wall._id+"/markups",
+        method: "get",
+        expectedResponseType: 'json',
+        callback: {
+          fn: this._onWallMarksLoaded,
+          scope: this
+        }
+      });
+    },
+
+    _onWallMarksLoaded: function(data) {
+      this._wallMarks = data.responseJSON;
+      this.$raiseEvent({
+        name: 'app.module.stickywall.wall.marks.updated',
+        marks: this._wallMarks
+      });
+    },
 
     getPostits: function() {
       return _.clone(this.__wall.postits, true);
