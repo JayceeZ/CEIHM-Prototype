@@ -85,7 +85,7 @@ Aria.tplScriptDefinition({
         // déselection
         this.$logDebug('Post-it ' + child.index + ' unselected');
         this.selectedPostits.splice(child.index, 1);
-        this.__saveSize(child.item, evt.target);
+        this.__saveSize(child.item, evt.target, child.index);
         this._refreshPostit(child.index);
       } else {
         // fin déplacement post-it
@@ -97,7 +97,7 @@ Aria.tplScriptDefinition({
       this.setActionsVisible(true);
     },
 
-    __saveSize: function (postit, target) {
+    __saveSize: function (postit, target, index) {
       if (target) {
         var style = target.getAttribute("style");
 
@@ -113,6 +113,7 @@ Aria.tplScriptDefinition({
           width: width,
           height: height
         }
+        this.saveWall(index);
       }
     },
 
