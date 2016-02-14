@@ -65,19 +65,21 @@ Aria.tplScriptDefinition({
     onZoomOut : function() {
       var wallDOM = document.getElementsByClassName("wall")[0];
       var newScale = this.model.wallScale;
-      if(newScale > 0.1)
-       newScale -= 0.05;
-      this.$json.setValue(this.model, "wallScale", newScale);
-      wallDOM.style = "transform: scale("+newScale+");";
+      if(newScale > 0.1) {
+        newScale -= 0.05;
+        this.$json.setValue(this.model, "wallScale", newScale);
+        wallDOM.style = "transform: scale(" + newScale + ");";
+      }
     },
 
     onZoomIn : function() {
       var wallDOM = document.getElementsByClassName("wall")[0];
       var newScale = this.model.wallScale;
-      if(newScale < 1.0)
+      if(newScale < 1.0) {
         newScale += 0.05;
-      this.$json.setValue(this.model, "wallScale", newScale);
-      wallDOM.style = "transform: scale("+newScale+");";
+        this.$json.setValue(this.model, "wallScale", newScale);
+        wallDOM.style = "transform: scale(" + newScale + ");";
+      }
     },
 
     onPostitMouseDown: function (evt, child) {
@@ -186,8 +188,8 @@ Aria.tplScriptDefinition({
             var postit = this.model.postits[i];
             if (postit && postit !== null) {
               // move positions
-              postit.position.x += evt.clientX - this.selectionPoint.x;
-              postit.position.y += evt.clientY - this.selectionPoint.y;
+              postit.position.x += (evt.clientX - this.selectionPoint.x)/this.model.wallScale;
+              postit.position.y += (evt.clientY - this.selectionPoint.y)/this.model.wallScale;
 
               this._refreshPostitPositionStyle(i);
               this.saveWall(i);
@@ -199,8 +201,8 @@ Aria.tplScriptDefinition({
       } else if (this.wallMove) {
         // déplacer le wall
         this.moveWall(evt.clientX - this.wallMove.x, evt.clientY - this.wallMove.y);
-        this.wallMove.x = evt.clientX;
-        this.wallMove.y = evt.clientY;
+        this.wallMove.x = Math.round(evt.clientX);
+        this.wallMove.y = Math.round(evt.clientY);
       }
     },
 
@@ -231,8 +233,8 @@ Aria.tplScriptDefinition({
           var postit = this.model.postits[i];
           if (postit && postit !== null) {
             // move positions
-            postit.position.x += evt.touches[0].clientX - this.selectionPoint.x;
-            postit.position.y += evt.touches[0].clientY - this.selectionPoint.y;
+            postit.position.x += (evt.touches[0].clientX - this.selectionPoint.x)/this.model.wallScale;
+            postit.position.y += (evt.touches[0].clientY - this.selectionPoint.y)/this.model.wallScale;
 
             this._refreshPostitPositionStyle(i);
             this.saveWall(i);
@@ -328,8 +330,8 @@ Aria.tplScriptDefinition({
     },
 
     moveWall: function (dx, dy) {
-      this.$json.setValue(this.wallOrig, "x", this.wallOrig.x + dx);
-      this.$json.setValue(this.wallOrig, "y", this.wallOrig.y + dy);
+      this.$json.setValue(this.wallOrig, "x", Math.round(this.wallOrig.x + dx/this.model.wallScale));
+      this.$json.setValue(this.wallOrig, "y", Math.round(this.wallOrig.y + dy/this.model.wallScale));
       for (var i = 0; i < this.model.postits.length; i++) {
         this._refreshPostitPositionStyle(i);
       }
