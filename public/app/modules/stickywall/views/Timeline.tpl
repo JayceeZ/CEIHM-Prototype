@@ -57,7 +57,7 @@
   {/macro}
 
   {macro tooltipDate(date)}
-  	${date.toLocaleString()}
+  	${new Date(date).toLocaleString()}
   {/macro}
 
 {/Template}

@@ -43,7 +43,7 @@
   {macro wallItem(child)}
     {var wall = child.item /}
     <a class="expand" href="#" {on click { fn: "loadWall", scope: this, args: [wall._id]} /}>
-    ${wall.name}
+    ${wall.name} - ${new Date(wall.date).toLocaleString()}
     <span class="label label-default label-pill pull-right">${wall.postits.length} post-its</span>
   {/macro}
 
