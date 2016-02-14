@@ -66,7 +66,7 @@ Aria.tplScriptDefinition({
       var wallDOM = document.getElementsByClassName("wall")[0];
       var newScale = this.model.wallScale;
       if(newScale > 0.1)
-       newScale -= 0.1;
+       newScale -= 0.05;
       this.$json.setValue(this.model, "wallScale", newScale);
       wallDOM.style = "transform: scale("+newScale+");";
     },
@@ -75,7 +75,7 @@ Aria.tplScriptDefinition({
       var wallDOM = document.getElementsByClassName("wall")[0];
       var newScale = this.model.wallScale;
       if(newScale < 1.0)
-        newScale += 0.1;
+        newScale += 0.05;
       this.$json.setValue(this.model, "wallScale", newScale);
       wallDOM.style = "transform: scale("+newScale+");";
     },
