@@ -36,7 +36,7 @@ div.zoom div {
   -ms-user-select: none;       /* IE/Edge */
   user-select: none;
 }
-div.zoom-in {
+div.zoom-out {
   background-image: url('images/minus.png');
   background-size: 21px 5px;
   background-position: 0px 15px;
@@ -44,7 +44,7 @@ div.zoom-in {
   width: 30px;
   height: 30px;
 }
-div.zoom-out {
+div.zoom-in {
   background-image: url('images/plus.png');
   background-size: 21px 21px;
   background-repeat: no-repeat;
