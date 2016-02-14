@@ -171,7 +171,7 @@
           ${postit.name}
         </div>
         <div class="content">
-          ${postit.content}
+          ${postit.content}<br />
           <a href="${postit.file}">Fichier joint "${postit.file}"</a>
         </div>
       {/if}

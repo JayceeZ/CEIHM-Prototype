@@ -158,6 +158,12 @@ app.get('/api/walls', function (req, res) {
   });
 });
 
+app.post('/api/file', upload.single('file'), function (req, res, next) {
+  console.log("File uploaded to " + req.file.path);
+
+  res.status(200).json({url: "uploads/"+req.file.filename});
+});
+
 app.post('/api/wall/:id/postit', upload.single('file'), function (req, res, next) {
   console.log("Received a file for postit");// form files
   console.log("File uploaded to " + req.file.path);
