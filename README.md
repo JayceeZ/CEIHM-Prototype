@@ -1,11 +1,12 @@
 # StickyApp
-An app for throwing away your StickyWalls
+An app to throw away your StickyWalls
 
 Using Aria Templates framework
 http://ariatemplates.com/
 
 # DISCLAIMER
 FOR EXPERIENCED DEVELOPERS ONLY
+
 This application is a prototype, you should not use it in production as there are a lot's of bugs and problems.
 
 # Requirements
